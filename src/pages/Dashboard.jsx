@@ -94,7 +94,7 @@ function Dashboard() {
     },
   };
 
-  const needleValue = machineData?.d?.current_OEE || 0;
+  const needleValue = machineData?.d?.current_OEE ? Number(machineData.d.current_OEE).toFixed(2) : '0.00' ;
   const needleData = {
     datasets: [
       {
@@ -161,7 +161,7 @@ function Dashboard() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <h1 className={`text-4xl font-bold flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-            <span role="img" aria-label="dashboard" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>📊</span> Dashboard
+           
           </h1>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             {/* Theme Toggle Button */}
@@ -216,7 +216,7 @@ function Dashboard() {
             </div>
             <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
               <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>OEE</p>
-              <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.current_OEE}</p>
+              <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}> {machineData?.d?.current_OEE ? Number(machineData.d.current_OEE).toFixed(2) : '0.00'}</p>
             </div>
             <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
               <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Current Speed</p>
