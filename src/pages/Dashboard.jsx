@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { useNavigate } from 'react-router-dom';
 import { getMachineData, getMachines, logoutService } from '../backservice/backservice';
 import { Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
-import { FaMoon, FaSun, FaUser, FaSignOutAlt } from 'react-icons/fa'; // Added FaUser and FaSignOutAlt for icons
+import { FaMoon, FaSun, FaUser, FaSignOutAlt } from 'react-icons/fa';
 
 function Dashboard() {
   const userData = useSelector((state) => state.authSlice.userData);
@@ -13,22 +13,19 @@ function Dashboard() {
   const [machinesList, setMachinesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown visibility
-  const navigate = useNavigate(); // Hook for navigation
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
-  // Toggle between dark and light mode
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
 
-  // Toggle dropdown visibility
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // Handle logout
   const handleLogout = () => {
-    if(logoutService()){
+    if (logoutService()) {
       navigate('/login');
     }
   };
@@ -67,7 +64,6 @@ function Dashboard() {
       });
   }, [currentMachine]);
 
-  // Data for the half-donut charts
   const productionData = {
     labels: ['Good Count', 'Rejected Count'],
     datasets: [
@@ -124,9 +120,9 @@ function Dashboard() {
   };
 
   return (
-    <div className={`h-screen w-screen flex ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
+    <div className={`min-h-screen h-auto flex flex-col md:flex-row ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
       {/* Sidebar */}
-      <div className={`h-screen w-[17vw] shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
+      <div className={`w-full h-auto md:w-64 shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
         <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
           <span role="img" aria-label="factory" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>🏭</span> PACMAC
         </div>
@@ -161,13 +157,13 @@ function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8 overflow-y-auto">
+      <div className="flex-1 p-4 md:p-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <h1 className={`text-4xl font-bold flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
             <span role="img" aria-label="dashboard" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>📊</span> Dashboard
           </h1>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 mt-4 md:mt-0">
             {/* Theme Toggle Button */}
             <button onClick={toggleTheme} className="focus:outline-none">
               {isDarkMode ? (
@@ -209,7 +205,7 @@ function Dashboard() {
           <h2 className={`text-3xl font-bold mb-6 flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
             <span role="img" aria-label="chart" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>📈</span> Machine Performance
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
               <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Serial Number</p>
               <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.serial_number}</p>
@@ -240,9 +236,9 @@ function Dashboard() {
         {/* Half-Donut Charts and Needle Indicator */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Good Count vs Rejected Count */}
-          <div className={`rounded-lg shadow-md p-6 flex flex-col justify-center items-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} style={{ height: '120%' }}>
+          <div className={`rounded-lg shadow-md p-6 flex flex-col justify-center items-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} style={{ height: '100%' }}>
             <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>Production Overview</h3>
-            <div className="relative h-80">
+            <div className="relative min-h-80">
               <Doughnut data={productionData} options={options} />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className={`text-3xl font-bold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
@@ -253,7 +249,7 @@ function Dashboard() {
           </div>
 
           {/* Needle Indicator for OEE */}
-          <div className={`rounded-lg shadow-md p-6  flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} style={{ height: '120%' }}>
+          <div className={`rounded-lg shadow-md p-6 flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} style={{ height: '100%' }}>
             <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>OEE</h3>
             <div className="relative" style={{ height: '300px' }}>
               <Doughnut data={needleData} options={needleOptions} />
