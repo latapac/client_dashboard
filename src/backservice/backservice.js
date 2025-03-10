@@ -55,6 +55,8 @@ export async function getMachines(cid) {
 
 export async function getMachineData(mid) {
     try {
+        console.log(mid);
+        
         const response = await fetch('http://64.227.139.217:3000/getMachineData/'+mid);
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -63,6 +65,8 @@ export async function getMachineData(mid) {
         if (data.status==200) {
             return data.data
         }else{
+            console.log(data);
+            
             return false
         }
   
