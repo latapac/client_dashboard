@@ -80,7 +80,7 @@ function MachindeData() {
     
     const intervalId = setInterval(() => {
       fetchdata();
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(intervalId);
   }, [serialNumber])
