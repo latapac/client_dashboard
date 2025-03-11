@@ -77,58 +77,95 @@ function MachindeData() {
   }, [serialNumber])
 
   return (
-    <>
-      <div className={`rounded-lg shadow-md p-6 mb-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-        <h6 className={`text-2xl font-bold mb-6 flex justify-around items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-          <span role="img" aria-label="chart" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>Serial No. {machineData?.serial_number} </span>
-          <span >Status : {mstatus[Number(machineData?.d?.status)]} </span>
-        </h6>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-            <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Current Speed</p>
-            <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.current_speed}</p>
-          </div>
-          <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-            <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Batch Number</p>
-            <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Batch_Number}</p>
-          </div>
-          <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-            <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Recipe Name</p>
-            <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Reciepe_Name}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Half-Donut Charts and Needle Indicator */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Good Count vs Rejected Count */}
-        <div className={`rounded-lg shadow-md p-6 flex flex-col justify-center items-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} style={{ height: '100%' }}>
-          <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>Production Overview</h3>
-          <div className="relative min-h-80">
-            <Doughnut data={productionData} options={options} />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className={`text-3xl font-bold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-                {machineData?.d?.Total_Production || 0}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Needle Indicator for OEE */}
-        <div className={`rounded-lg shadow-md p-6 flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} style={{ height: '100%' }}>
-          <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>OEE</h3>
-          <div className="relative" style={{ height: '300px' }}>
-            <Doughnut data={needleData} options={needleOptions} />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className={`text-3xl font-bold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-                {needleValue}%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+   <>
+    <div className={`rounded-lg shadow-md p-6 mb-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+             <h6 className={`text-2xl font-bold mb-6 flex justify-around items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
+               <span role="img" aria-label="chart" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>Serial No. {machineData?.serial_number} </span>
+              <span >Status : {mstatus[Number(machineData?.d?.status)]} </span>
+             </h6>
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Current Speed</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.current_speed}</p>
+               </div>
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Batch Number</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Batch_Number}</p>
+               </div>
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Recipe Name</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Reciepe_Name}</p>
+               </div>
+             </div>
+           </div>
+    <div className={`rounded-lg shadow-md p-6 mb-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}  `}>
+            
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} `}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Total Production</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Total_Production}</p>
+               </div>
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}  `}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Good Production</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Good_Count}</p>
+               </div>
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}  `}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Bad Production</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Reject_Counters}</p>
+               </div>
+             </div>
+           </div>
+           {/* Half-Donut Charts and Needle Indicator */}
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             {/* Good Count vs Rejected Count */}
+             <div className={`rounded-lg shadow-md p-6 flex flex-col justify-center items-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} style={{ height: '100%' }}>
+               <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>Production Overview</h3>
+               <div className="relative min-h-80">
+                 <Doughnut data={productionData} options={options} />
+                 <div className="absolute inset-0 flex items-center justify-center">
+                   <span className={`text-3xl font-bold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
+                     {machineData?.d?.Total_Production || 0}
+                   </span>
+                 </div>
+               </div>
+             </div>
+   
+             {/* Needle Indicator for OEE */}
+             <div className={`rounded-lg shadow-md p-6 flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`} style={{ height: '100%' }}>
+               <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>OEE</h3>
+               <div className="relative" style={{ height: '300px' }}>
+                 <Doughnut data={needleData} options={needleOptions} />
+                 <div className="absolute inset-0 flex items-center justify-center">
+                   <span className={`text-3xl font-bold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
+                     {needleValue}%
+                   </span>
+                 </div>
+               </div>
+              
+             </div>
+             <div className={`rounded-lg shadow-md p-6 mb-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}  flex flex-row w-5xl `}>
+            
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+              
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} w-70`}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Total Production</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Total_Production}</p>
+               </div>
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}  w-70`}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Good Production</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Good_Count}</p>
+               </div>
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}  w-70`}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Bad Production</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Reject_Counters}</p>
+               </div>
+             </div>
+           </div>
+           </div>
+          
+   </>
   )
 }
 

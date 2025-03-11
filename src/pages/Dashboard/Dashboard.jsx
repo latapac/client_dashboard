@@ -97,7 +97,7 @@ function Dashboard() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <h1 className={`text-4xl font-bold flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-
+            
           </h1>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             {/* Theme Toggle Button */}
