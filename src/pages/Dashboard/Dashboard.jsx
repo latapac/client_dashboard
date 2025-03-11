@@ -58,28 +58,34 @@ function Dashboard() {
         <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
           <span role="img" aria-label="factory" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>🏭</span> PACMAC
         </div>
-        <div className="p-4">
-          <h1 className='text-2xl text-slate-50 p-3'>
-            MACHINES
-          </h1>
-          <ul className="space-y-2">
-            {machinesList.length > 0 ? (
-              machinesList.map((element) => (
-                <li
-                  key={element.serial_number}
-                  onClick={() => { 
-                    navigate(`/data?serial_number=${element.serial_number}`);
-                  }}
-                  className={`cursor-pointer p-2 rounded transition duration-200 ${isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'
-                    }`}
-                >
-                  {element.serial_number}
-                </li>
-              ))
-            ) : (
-              <div className={isDarkMode ? 'text-white' : 'text-gray-800'}>No machines available</div>
-            )}
-          </ul>
+        <div className="p-4 flex flex-col justify-between h-screen max-h-screen">
+          <div>
+            <h1 className='text-2xl text-slate-50 p-3'>
+              MACHINES
+            </h1>
+            <ul className="space-y-2">
+              {machinesList.length > 0 ? (
+                machinesList.map((element) => (
+                  <li
+                    key={element.serial_number}
+                    onClick={() => {
+                      navigate(`/data?serial_number=${element.serial_number}`);
+                    }}
+                    className={`cursor-pointer p-2 rounded transition duration-200 ${isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'
+                      }`}
+                  >
+                    {element.serial_number}
+                  </li>
+                ))
+              ) : (
+                <div className={isDarkMode ? 'text-white' : 'text-gray-800'}>No machines available</div>
+              )}
+            </ul>
+          </div>
+
+          <div>
+            <button className={`text-white bg-blue-700 p-3 rounded-xl`}>Back</button>
+          </div>
         </div>
       </div>
 
