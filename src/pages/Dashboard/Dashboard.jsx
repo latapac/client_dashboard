@@ -17,24 +17,24 @@ function Dashboard() {
 
   const [machinesList, setMachinesList] = useState([]);
 
-  // useEffect(() => {
-  //   if (userData?.c_id) {
-  //     getMachines(userData.c_id)
-  //       .then((data) => {
-  //         if (data) {
-  //           setMachinesList(data);
-  //           if (machinesList) {
-  //             setCurrentMachine(machinesList[0].serial_number);
-  //           }
-  //         }
-  //       })
-  //       .catch(() => {
-  //         console.log('machines fetch failed');
-  //       })
-  //       .finally(() => {
-  //       });
-  //   }
-  // }, [userData?.c_id]);
+  useEffect(() => {
+    if (userData?.c_id) {
+      getMachines(userData.c_id)
+        .then((data) => {
+          if (data) {
+            setMachinesList(data);
+            if (machinesList) {
+              setCurrentMachine(machinesList[0].serial_number);
+            }
+          }
+        })
+        .catch(() => {
+          console.log('machines fetch failed');
+        })
+        .finally(() => {
+        });
+    }
+  }, [userData?.c_id]);
   const navigate = useNavigate();
 
   const toggleTheme = () => {
@@ -59,7 +59,7 @@ function Dashboard() {
           <span role="img" aria-label="factory" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>🏭</span> PACMAC
         </div>
         <div className="p-4">
-          {/* <h1 className='text-2xl text-slate-50 p-3'>
+          <h1 className='text-2xl text-slate-50 p-3'>
             MACHINES
           </h1>
           <ul className="space-y-2">
@@ -68,7 +68,7 @@ function Dashboard() {
                 <li
                   key={element.serial_number}
                   onClick={() => { 
-                    navigate("/data", { state: { serial_number: element.serial_number } }) 
+                    navigate(`/data?serial_number=${element.serial_number}`);
                   }}
                   className={`cursor-pointer p-2 rounded transition duration-200 ${isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'
                     }`}
@@ -79,7 +79,7 @@ function Dashboard() {
             ) : (
               <div className={isDarkMode ? 'text-white' : 'text-gray-800'}>No machines available</div>
             )}
-          </ul> */}
+          </ul>
         </div>
       </div>
 
