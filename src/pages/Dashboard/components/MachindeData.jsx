@@ -1,80 +1,82 @@
-import React,{useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { Doughnut } from 'react-chartjs-2';
 import { useLocation, useOutletContext } from 'react-router-dom';
 import { getMachineData } from '../../../backservice/backservice';
 
 function MachindeData() {
 
-    const {isDarkMode} = useOutletContext()
+  const { isDarkMode } = useOutletContext()
 
-    const location = useLocation()
-    
-    const {serial_number} = location.state || "00"
 
-    const [machineData,setMachineData] = useState({})
 
-    const mstatus = ["STOP","RUNNING","IDLE","ABORTED"]
-        
-      const productionData = {
-        labels: ['Good Count', 'Rejected Count'],
-        datasets: [
-          {
-            data: [machineData?.d?.Good_Count || 0, machineData?.d?.Reject_Counters || 0],
-            backgroundColor: ['#00FF00', '#FF0000'],
-            borderColor: ['#00FF00', '#FF0000'],
-            borderWidth: 1,
-          },
-        ],
-      };
-    
-      const options = {
-        circumference: 180,
-        rotation: -90,
-        cutout: '70%',
-        plugins: {
-          legend: {
-            display: true,
-            position: 'bottom',
-            labels: {
-              color: isDarkMode ? '#FFFFFF' : '#000000',
-            },
-          },
-          tooltip: {
-            enabled: true,
-          },
+  const [machineData, setMachineData] = useState({})
+
+  const mstatus = ["STOP", "RUNNING", "IDLE", "ABORTED"]
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const serialNumber = queryParams.get('serial_number');
+
+  const productionData = {
+    labels: ['Good Count', 'Rejected Count'],
+    datasets: [
+      {
+        data: [machineData?.d?.Good_Count || 0, machineData?.d?.Reject_Counters || 0],
+        backgroundColor: ['#00FF00', '#FF0000'],
+        borderColor: ['#00FF00', '#FF0000'],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    circumference: 180,
+    rotation: -90,
+    cutout: '70%',
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          color: isDarkMode ? '#FFFFFF' : '#000000',
         },
-      };
-    
-      const needleValue = machineData?.d?.current_OEE ? Number(machineData.d.current_OEE).toFixed(2) : '0.00' ;
-      const needleData = {
-        datasets: [
-          {
-            data: [needleValue, 100 - needleValue],
-            backgroundColor: ['#00FFFF', isDarkMode ? '#333333' : '#E0E0E0'],
-            borderWidth: 0,
-          },
-        ],
-      };
-    
-      const needleOptions = {
-        circumference: 180,
-        rotation: -90,
-        cutout: '70%',
-        plugins: {
-          legend: {
-            display: false,
-          },
-          tooltip: {
-            enabled: false,
-          },
-        },
-      };
-    
-   useEffect(()=>{
-        getMachineData(serial_number).then((data)=>{
-            setMachineData(data)
-        })
-   },[]) 
+      },
+      tooltip: {
+        enabled: true,
+      },
+    },
+  };
+
+  const needleValue = machineData?.d?.current_OEE ? Number(machineData.d.current_OEE).toFixed(2) : '0.00';
+  const needleData = {
+    datasets: [
+      {
+        data: [needleValue, 100 - needleValue],
+        backgroundColor: ['#00FFFF', isDarkMode ? '#333333' : '#E0E0E0'],
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const needleOptions = {
+    circumference: 180,
+    rotation: -90,
+    cutout: '70%',
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+  };
+
+  useEffect(() => {
+    getMachineData(serialNumber).then((data) => {
+      setMachineData(data)
+    })
+  }, [serialNumber])
 
   return (
    <>

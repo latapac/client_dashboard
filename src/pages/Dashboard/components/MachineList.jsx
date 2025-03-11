@@ -47,15 +47,12 @@ function MachineList() {
           }
         };
     
-        // Fetch data immediately on mount
         fetchData();
     
-        // Set up interval to fetch data every 10 seconds
         const intervalId = setInterval(() => {
           fetchData();
-        }, 10000); // 10 seconds in milliseconds
+        }, 10000);
     
-        // Clean up the interval when the component is unmounted or when userData changes
         return () => clearInterval(intervalId);
       }, [userData?.c_id]);
 
@@ -68,15 +65,13 @@ function MachineList() {
         {machinesList.length > 0 ? (
             machinesList.map((element) => {
                 const status = mstatus[Number(machineData[element.serial_number]?.d?.status)]
-                console.log(element);
-                
                 const oee = machineData[element.serial_number]?.d?.current_OEE[0];
                 const speed = machineData[element.serial_number]?.d?.current_speed[0];
                 
                 return (
                     <li
                         key={element.serial_number}
-                        onClick={() => navigate("/data", { state: { serial_number: element.serial_number } })}
+                        onClick={() => navigate(`/data?serial_number=${element.serial_number}`)}
                         className={`
                             group flex justify-between items-center p-4 rounded-lg cursor-pointer
                             transition-all duration-300 ease-in-out transform hover:scale-[1.02]
