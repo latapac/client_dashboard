@@ -24,28 +24,37 @@ function MachineList() {
       return (nowUTC - inputUTC) > 20000;
     }
 
-     useEffect(() => {
-        if (userData?.c_id) {
-          getMachines(userData.c_id)
-            .then((data) => {
+    useEffect(() => {
+        const fetchData = async () => {
+          if (userData?.c_id) {
+            try {
+              const data = await getMachines(userData.c_id);
               if (data) {
                 setMachinesList(data);
-                if(data){
-                    data.forEach(async (machine)=>{
-                        const mdata = await getMachineData(machine.serial_number) 
-                        let obj = machineData
-                        obj[machine.serial_number] = mdata
-                        setMachineData({...obj})
-                    })
-                }
+                data.forEach(async (machine) => {
+                  const mdata = await getMachineData(machine.serial_number);
+                  setMachineData((prevData) => ({
+                    ...prevData,
+                    [machine.serial_number]: mdata,
+                  }));
+                });
               }
-            })
-            .catch(() => {
+            } catch (error) {
               console.log('machines fetch failed');
-            })
-            .finally(() => {
-            });
-        }
+            }
+          }
+        };
+    
+        // Fetch data immediately on mount
+        fetchData();
+    
+        // Set up interval to fetch data every 10 seconds
+        const intervalId = setInterval(() => {
+          fetchData();
+        }, 10000); // 10 seconds in milliseconds
+    
+        // Clean up the interval when the component is unmounted or when userData changes
+        return () => clearInterval(intervalId);
       }, [userData?.c_id]);
 
   return (
