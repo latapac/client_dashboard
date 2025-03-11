@@ -7,8 +7,6 @@ function MachindeData() {
 
   const { isDarkMode } = useOutletContext()
 
-
-
   const [machineData, setMachineData] = useState({})
 
   const mstatus = ["STOP", "RUNNING", "IDLE", "ABORTED"]
