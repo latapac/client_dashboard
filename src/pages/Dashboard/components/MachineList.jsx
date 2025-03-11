@@ -69,6 +69,7 @@ function MachineList() {
             machinesList.map((element) => {
                 const status = mstatus[Number(machineData[element.serial_number]?.d?.status)]
                 const oee = machineData[element.serial_number]?.d?.current_OEE[0];
+                const speed = machineData[element.serial_number]?.d?.current_speed[0];
                 
                 return (
                     <li
@@ -117,6 +118,16 @@ function MachineList() {
                                     'text-red-600'
                                 }`}>
                                     {oee}%
+                                </span>
+                            </div>
+                            <div className="flex flex-col items-end">
+                                <span className={`text-sm font-semibold ${
+                                    isDarkMode ? 'text-slate-300' : 'text-slate-600'
+                                }`}>
+                                    Speed
+                                </span>
+                                <span className={`font-bold`}>
+                                    {speed}
                                 </span>
                             </div>
                             
