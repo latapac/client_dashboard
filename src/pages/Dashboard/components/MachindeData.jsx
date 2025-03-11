@@ -101,7 +101,24 @@ function MachindeData() {
                </div>
              </div>
            </div>
-   
+    <div className={`rounded-lg shadow-md p-6 mb-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}  `}>
+            
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} `}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Total Production</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Total_Production}</p>
+               </div>
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}  `}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Good Production</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Good_Count}</p>
+               </div>
+               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}  `}>
+                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Bad Production</p>
+                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.Reject_Counters}</p>
+               </div>
+             </div>
+           </div>
            {/* Half-Donut Charts and Needle Indicator */}
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
              {/* Good Count vs Rejected Count */}
