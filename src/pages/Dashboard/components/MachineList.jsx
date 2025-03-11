@@ -86,7 +86,7 @@ function MachineList() {
               >
                 <div className="flex items-center space-x-4">
                   <div
-                    className={`w-3 h-3 rounded-full ${
+                    className={`w-5 h-5 rounded-full ${
                       dataChange(element.serial_number, ts) ? 'bg-green-500' : 'bg-red-500'
                     }`}
                   />
