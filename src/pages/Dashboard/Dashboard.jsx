@@ -75,7 +75,7 @@ function Dashboard() {
         <div className="p-4 flex flex-col justify-between h-screen max-h-screen">
           <div>
             <h1 className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer" onClick={() => navigate('/')}>
-              MACHINES
+            <i class="fa-solid fa-arrow-left"></i> Machines
             </h1>
             <ul className="space-y-2">
               {machinesList.length > 0 ? (
@@ -101,7 +101,8 @@ function Dashboard() {
       {/* Main Content */}
       <div className="flex-1 p-4 md:p-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-baseline mb-8">
+        <div className='text-3xl font-bold text-blue-500  border-b-2  pb-3'>Machine Status</div>
           <h1 className={`text-4xl font-bold flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}></h1>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             {/* Theme Toggle Button */}
@@ -114,14 +115,15 @@ function Dashboard() {
             </button>
 
             {/* Welcome Message */}
-            <div className={`p-3 rounded-lg shadow-sm flex items-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`}>
+            <div className={`p-3 rounded-lg shadow-sm flex items-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}
+             hover:drop-shadow-xl`}>
               <span className={`mr-2 text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Welcome,</span>
               <span className={`font-semibold text-lg ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{userData?.username}</span>
             </div>
 
             {/* Logout Dropdown */}
             <div className="relative" ref={dropdownRef}>
-              <button onClick={toggleDropdown} className="flex items-center focus:outline-none">
+              <button onClick={toggleDropdown} className="flex items-center focus:outline-none  hover:shadow-cyan-500">
                 <FaUser className={`text-2xl ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`} />
               </button>
               {isDropdownOpen && (

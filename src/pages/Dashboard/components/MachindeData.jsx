@@ -15,6 +15,23 @@ function MachindeData() {
   const queryParams = new URLSearchParams(location.search);
   const serialNumber = queryParams.get('serial_number');
 
+  function getStatusColor(status) {
+    switch (status) {
+      case "STOP":
+        return "text-red-500"
+        break;
+      case "RUNNING":
+        return "text-green-500"
+        break;
+      case "IDLE":
+        return "text-yellow-500"
+        break;
+      case "ABORTED":
+        return "text-orange-300"
+        break;
+    }
+  }
+
   const productionData = {
     labels: ['Good Count', 'Rejected Count'],
     datasets: [
@@ -87,11 +104,11 @@ function MachindeData() {
 
   return (
    <>
-    <div className={`rounded-lg shadow-md p-6 mb-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-             <h6 className={`text-2xl font-bold mb-6 flex justify-around items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
+    <div className={`rounded-lg shadow-md p-6 mb-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} text-`}>
+             <h6 className={`text-2xl font-bold mb-6 flex justify-between items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
                <span role="img" aria-label="chart" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>Serial No. {machineData?.serial_number} </span>
-              <span >Status : {mstatus[Number(machineData?.d?.status)]} </span>
-             </h6>
+              <span>Status : <span className={getStatusColor(mstatus[Number(machineData?.d?.status)])}> {mstatus[Number(machineData?.d?.status)]} </span>
+             </span></h6>
              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               
                <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
@@ -109,7 +126,10 @@ function MachindeData() {
              </div>
            </div>
     <div className={`rounded-lg shadow-md p-6 mb-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}  `}>
-            
+    <h6 className={`text-2xl font-bold mb-6 flex justify-between items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
+               <span role="img" aria-label="chart" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>Production Details</span>
+              
+             </h6>
              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               
                <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} `}>
