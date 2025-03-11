@@ -10,12 +10,13 @@ function Dashboard() {
   const userData = useSelector((state) => state.authSlice.userData);
   const [currentMachine, setCurrentMachine] = useState(null);
   const [machineData, setMachineData] = useState({});
-  const [loading, setLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 
   const [machinesList, setMachinesList] = useState([]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     if (userData?.c_id) {
@@ -35,8 +36,7 @@ function Dashboard() {
         });
     }
   }, [userData?.c_id]);
-  const navigate = useNavigate();
-
+ 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
@@ -84,7 +84,10 @@ function Dashboard() {
           </div>
 
           <div>
-            <button className={`text-white bg-blue-700 p-3 rounded-xl`}>Back</button>
+            <button 
+            className={`text-white bg-blue-700 p-3 rounded-xl`}
+            onClick={()=>navigate("/")}
+            >Back</button>
           </div>
         </div>
       </div>
