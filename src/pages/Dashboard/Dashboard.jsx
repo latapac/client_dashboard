@@ -17,24 +17,24 @@ function Dashboard() {
 
   const [machinesList, setMachinesList] = useState([]);
 
-  // useEffect(() => {
-  //   if (userData?.c_id) {
-  //     getMachines(userData.c_id)
-  //       .then((data) => {
-  //         if (data) {
-  //           setMachinesList(data);
-  //           if (machinesList) {
-  //             setCurrentMachine(machinesList[0].serial_number);
-  //           }
-  //         }
-  //       })
-  //       .catch(() => {
-  //         console.log('machines fetch failed');
-  //       })
-  //       .finally(() => {
-  //       });
-  //   }
-  // }, [userData?.c_id]);
+  useEffect(() => {
+    if (userData?.c_id) {
+      getMachines(userData.c_id)
+        .then((data) => {
+          if (data) {
+            setMachinesList(data);
+            if (machinesList) {
+              setCurrentMachine(machinesList[0].serial_number);
+            }
+          }
+        })
+        .catch(() => {
+          console.log('machines fetch failed');
+        })
+        .finally(() => {
+        });
+    }
+  }, [userData?.c_id]);
   const navigate = useNavigate();
 
   const toggleTheme = () => {
@@ -58,8 +58,8 @@ function Dashboard() {
         <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
           <span role="img" aria-label="factory" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>🏭</span> PACMAC
         </div>
-        <div className="p-4">
-          {/* <h1 className='text-2xl text-slate-50 p-3'>
+        <div className="p-4  ">
+          <h1 className='text-2xl text-slate-50 p-3'>
             MACHINES
           </h1>
           <ul className="space-y-2">
@@ -79,7 +79,8 @@ function Dashboard() {
             ) : (
               <div className={isDarkMode ? 'text-white' : 'text-gray-800'}>No machines available</div>
             )}
-          </ul> */}
+            
+          </ul>
         </div>
       </div>
 
@@ -88,7 +89,7 @@ function Dashboard() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <h1 className={`text-4xl font-bold flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-
+            
           </h1>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             {/* Theme Toggle Button */}
