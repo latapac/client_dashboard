@@ -12,6 +12,8 @@ function MachindeData() {
     const {serial_number} = location.state || "00"
 
     const [machineData,setMachineData] = useState({})
+
+    const mstatus = ["STOP","RUNNING","IDLE","ABORTED"]
         
       const productionData = {
         labels: ['Good Count', 'Rejected Count'],
@@ -70,8 +72,6 @@ function MachindeData() {
     
    useEffect(()=>{
         getMachineData(serial_number).then((data)=>{
-            console.log(data);
-            
             setMachineData(data)
         })
    },[]) 
@@ -79,22 +79,12 @@ function MachindeData() {
   return (
    <>
     <div className={`rounded-lg shadow-md p-6 mb-8 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-             <h2 className={`text-3xl font-bold mb-6 flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-               <span role="img" aria-label="chart" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>📈</span> Machine Performance
-             </h2>
+             <h6 className={`text-2xl font-bold mb-6 flex justify-around items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
+               <span role="img" aria-label="chart" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>Serial No. {machineData?.serial_number} </span>
+              <span >Status : {mstatus[Number(machineData?.d?.status)]} </span>
+             </h6>
              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Serial Number</p>
-                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.serial_number}</p>
-               </div>
-               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Status</p>
-                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.status}</p>
-               </div>
-               <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                 <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>OEE</p>
-                 <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}> {machineData?.d?.current_OEE ? Number(machineData.d.current_OEE).toFixed(2) : '0.00'}</p>
-               </div>
+              
                <div className={`p-4 rounded-lg shadow-sm ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
                  <p className={`font-medium text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>Current Speed</p>
                  <p className={`text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>{machineData?.d?.current_speed}</p>

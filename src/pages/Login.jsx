@@ -29,7 +29,6 @@ function Login() {
 
   useEffect(() => {
     const { username, password } = checkLoginService()
-    console.log(checkLoginService());
     if (username) {
       loginService(username, password).then((data) => {
         if (data) {
