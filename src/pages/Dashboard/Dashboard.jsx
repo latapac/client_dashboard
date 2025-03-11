@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'; // Added useRef
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getMachineData, getMachines, logoutService } from '../../backservice/backservice';
+import { getMachines, logoutService } from '../../backservice/backservice';
 import 'chart.js/auto';
 import { FaMoon, FaSun, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { Outlet } from 'react-router-dom';
+import logo from "/logo.png"
 
 function Dashboard() {
   const userData = useSelector((state) => state.authSlice.userData);
@@ -70,11 +71,11 @@ function Dashboard() {
       {/* Sidebar */}
       <div className={`w-full h-auto md:w-64 shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
         <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
-          <span role="img" aria-label="factory" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>🏭</span> PACMAC
+         <img src={logo} className='h-5' alt="" /> PACMAC
         </div>
         <div className="p-4 flex flex-col justify-between h-screen max-h-screen">
           <div>
-            <h1 className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer" onClick={() => navigate('/')}>
+            <h1 className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer hover:underline" onClick={() => navigate('/')}>
               MACHINES
             </h1>
             <ul className="space-y-2">

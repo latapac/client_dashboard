@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import { getMachineData, getMachines } from '../../../backservice/backservice';
+import { useTimer } from 'react-timer-hook';
 
 function MachineList() {
   const navigate = useNavigate();
@@ -15,6 +16,25 @@ function MachineList() {
   const prevTpRef = useRef({});
 
   const mstatus = ['STOP', 'RUNNING', 'IDLE', 'ABORTED'];
+
+  function formatTimestamp(isoString) {
+    const date = new Date(isoString);
+  
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const day = date.getDate()
+    const month = date.getMonth()
+    const year = date.getFullYear()
+   
+    return `${hours}:${minutes}:${seconds} ${day}/${month+1}/${year}`;
+  }
+  
+  // Usage
+  const timestamp = "2025-03-07T11:28:15.295884";
+  console.log(formatTimestamp(timestamp)); 
+  // Output: "11:28:15.295 AM"
+  
 
   
   const dataChange = (serialNumber, tp) => {
@@ -51,7 +71,7 @@ function MachineList() {
 
     const intervalId = setInterval(() => {
       fetchData();
-    }, 10000);
+    }, 60000);
 
     return () => clearInterval(intervalId);
   }, [userData?.c_id]);
@@ -68,7 +88,8 @@ function MachineList() {
             const oee = Number(machineData[element.serial_number]?.d?.current_OEE[0]).toFixed(2);
             const speed = machineData[element.serial_number]?.d?.current_speed[0];
             const ts = machineData[element.serial_number]?.ts; // Timestamp
-
+            
+            
             return (
               <li
                 key={element.serial_number}
@@ -95,7 +116,7 @@ function MachineList() {
                     {element.serial_number}
                     
                   </span>
-                  <p className={`${!isDarkMode?'text-gray-800':'text-emerald-200'}`}>Last Active:</p>
+                  <p className={`${!isDarkMode?'text-gray-800':'text-emerald-200'} font-mono`}>Last Data:{` ${formatTimestamp(ts)}`}</p>
                   </div>
                  
                   
