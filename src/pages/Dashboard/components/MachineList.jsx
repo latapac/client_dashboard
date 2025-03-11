@@ -68,8 +68,6 @@ function MachineList() {
         {machinesList.length > 0 ? (
             machinesList.map((element) => {
                 const status = mstatus[Number(machineData[element.serial_number]?.d?.status)]
-                console.log(element);
-                
                 const oee = machineData[element.serial_number]?.d?.current_OEE[0];
                 
                 return (
