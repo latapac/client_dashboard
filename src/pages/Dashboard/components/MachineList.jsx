@@ -57,8 +57,8 @@ function MachineList() {
   }, [userData?.c_id]);
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-slate-700 dark:text-slate-200 border-b-2 border-blue-200 dark:border-blue-800 pb-3">
+    <div className="p-6 ">
+    <h1 className='text-3xl font-bold mb-6 text-blue-500  border-b-2  pb-3'>
         MACHINE STATUS
       </h1>
       <ul className="space-y-3">
