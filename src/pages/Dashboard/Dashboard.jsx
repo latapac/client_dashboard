@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react'; // Added useRef
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getMachineData, getMachines, logoutService } from '../../backservice/backservice';
@@ -12,11 +12,26 @@ function Dashboard() {
   const [machineData, setMachineData] = useState({});
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-
   const [machinesList, setMachinesList] = useState([]);
   const navigate = useNavigate();
 
+  // Ref for dropdown
+  const dropdownRef = useRef(null);
+
+  // Handle clicks outside the dropdown
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  // Add event listener for outside clicks
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     if (userData?.c_id) {
@@ -32,11 +47,10 @@ function Dashboard() {
         .catch(() => {
           console.log('machines fetch failed');
         })
-        .finally(() => {
-        });
+        .finally(() => {});
     }
   }, [userData?.c_id]);
- 
+
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
@@ -53,14 +67,14 @@ function Dashboard() {
 
   return (
     <div className={`min-h-screen h-auto flex flex-col md:flex-row ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
-
+      {/* Sidebar */}
       <div className={`w-full h-auto md:w-64 shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
         <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
           <span role="img" aria-label="factory" className={isDarkMode ? 'text-blue-500' : 'text-blue-600'}>🏭</span> PACMAC
         </div>
         <div className="p-4 flex flex-col justify-between h-screen max-h-screen">
           <div>
-            <h1 className='text-2xl text-slate-50 p-3'>
+            <h1 className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer" onClick={() => navigate('/')}>
               MACHINES
             </h1>
             <ul className="space-y-2">
@@ -71,8 +85,7 @@ function Dashboard() {
                     onClick={() => {
                       navigate(`/data?serial_number=${element.serial_number}`);
                     }}
-                    className={`cursor-pointer p-2 rounded transition duration-200 ${isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'
-                      }`}
+                    className={`cursor-pointer p-2 rounded transition duration-200 ${isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'}`}
                   >
                     {element.serial_number}
                   </li>
@@ -82,13 +95,6 @@ function Dashboard() {
               )}
             </ul>
           </div>
-
-          <div>
-            <button 
-            className={`text-white bg-blue-700 p-3 rounded-xl`}
-            onClick={()=>navigate("/")}
-            >Back</button>
-          </div>
         </div>
       </div>
 
@@ -96,9 +102,7 @@ function Dashboard() {
       <div className="flex-1 p-4 md:p-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-          <h1 className={`text-4xl font-bold flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-            
-          </h1>
+          <h1 className={`text-4xl font-bold flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}></h1>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             {/* Theme Toggle Button */}
             <button onClick={toggleTheme} className="focus:outline-none">
@@ -116,7 +120,7 @@ function Dashboard() {
             </div>
 
             {/* Logout Dropdown */}
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button onClick={toggleDropdown} className="flex items-center focus:outline-none">
                 <FaUser className={`text-2xl ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`} />
               </button>
