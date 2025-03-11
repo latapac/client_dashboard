@@ -37,6 +37,9 @@ function MachineList() {
 
   
   const dataChange = (serialNumber, tp) => {
+    if (prevTpRef.current[serialNumber] === "") {
+        return true
+    }
     if (prevTpRef.current[serialNumber] === tp) {
       return false; // No change
     } else {
