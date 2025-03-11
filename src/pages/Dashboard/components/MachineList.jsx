@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import { getMachineData, getMachines } from '../../../backservice/backservice';
-import { useTimer } from 'react-timer-hook';
 
 function MachineList() {
   const navigate = useNavigate();
