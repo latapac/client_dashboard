@@ -7,8 +7,6 @@ function MachindeData() {
 
   const { isDarkMode } = useOutletContext()
 
-
-
   const [machineData, setMachineData] = useState({})
 
   const mstatus = ["STOP", "RUNNING", "IDLE", "ABORTED"]
@@ -73,9 +71,18 @@ function MachindeData() {
   };
 
   useEffect(() => {
-    getMachineData(serialNumber).then((data) => {
+
+    const fetchdata = ()=>{getMachineData(serialNumber).then((data) => {
       setMachineData(data)
-    })
+    })}
+
+    fetchdata();
+    
+    const intervalId = setInterval(() => {
+      fetchdata();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
   }, [serialNumber])
 
   return (

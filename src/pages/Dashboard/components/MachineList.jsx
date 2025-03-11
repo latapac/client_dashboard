@@ -15,16 +15,23 @@ function MachineList() {
 
      const mstatus = ["STOP","RUNNING","IDLE","ABORTED"]
 
+     const prevTp = ""
+
      
      function isMoreThan20SecondsAgoUTC(isoString) {
+        
       const inputDate = new Date(isoString);
       const nowUTC = Date.now(); // UTC timestamp
       
       // Convert input date to UTC timestamp
       const inputUTC = inputDate.getTime();
+
+      console.log(inputDate)
       
       return (nowUTC - inputUTC) > 20000;
     }
+
+
 
     useEffect(() => {
         const fetchData = async () => {
