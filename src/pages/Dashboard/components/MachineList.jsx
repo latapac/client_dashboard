@@ -95,7 +95,7 @@ function MachineList() {
                     {element.serial_number}
                     
                   </span>
-                  <p>jkhyihiu</p>
+                  <p className={`${!isDarkMode?'text-gray-800':'text-emerald-200'}`}>Last Active:</p>
                   </div>
                  
                   
