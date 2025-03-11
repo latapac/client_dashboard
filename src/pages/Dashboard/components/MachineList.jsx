@@ -65,7 +65,7 @@ function MachineList() {
         {machinesList.length > 0 ? (
           machinesList.map((element) => {
             const status = mstatus[Number(machineData[element.serial_number]?.d?.status)];
-            const oee = machineData[element.serial_number]?.d?.current_OEE[0];
+            const oee = Number(machineData[element.serial_number]?.d?.current_OEE[0]).toFixed(2);
             const speed = machineData[element.serial_number]?.d?.current_speed[0];
             const ts = machineData[element.serial_number]?.ts; // Timestamp
 
@@ -90,9 +90,15 @@ function MachineList() {
                       dataChange(element.serial_number, ts) ? 'bg-green-500' : 'bg-red-500'
                     }`}
                   />
+                  <div className='flex flex-col'>
                   <span className="font-mono font-medium text-lg">
                     {element.serial_number}
+                    
                   </span>
+                  <p>jkhyihiu</p>
+                  </div>
+                 
+                  
                 </div>
 
                 <div className="flex items-center space-x-6">
