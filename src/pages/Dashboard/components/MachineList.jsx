@@ -70,7 +70,7 @@ function MachineList() {
 
     const intervalId = setInterval(() => {
       fetchData();
-    }, 60000);
+    }, 35000);
 
     return () => clearInterval(intervalId);
   }, [userData?.c_id]);
