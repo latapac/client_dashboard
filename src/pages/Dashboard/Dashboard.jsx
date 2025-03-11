@@ -74,7 +74,7 @@ function Dashboard() {
         </div>
         <div className="p-4 flex flex-col justify-between h-screen max-h-screen">
           <div>
-            <h1 className="text-2xl text-blue-500 font-bold p-3" onClick={() => navigate('/')}>
+            <h1 className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer" onClick={() => navigate('/')}>
               MACHINES
             </h1>
             <ul className="space-y-2">
