@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Doughnut } from 'react-chartjs-2';
-import { useLocation, useOutletContext } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { getMachineData } from '../../../backservice/backservice';
 
 function MachindeData() {
 
-  const { isDarkMode } = useOutletContext()
+  const isDarkMode = false
 
   const [machineData, setMachineData] = useState({})
 

@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react'; // Added useRef
+import React, { useEffect, useState, useRef,useMemo } from 'react'; // Added useRef
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getMachines, logoutService } from '../../backservice/backservice';
 import 'chart.js/auto';
-import { FaMoon, FaSun, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import {  FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { Outlet } from 'react-router-dom';
 import logo from "/logo.png"
 
@@ -11,13 +11,17 @@ function Dashboard() {
   const userData = useSelector((state) => state.authSlice.userData);
   const [currentMachine, setCurrentMachine] = useState(null);
   const [machineData, setMachineData] = useState({});
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [machinesList, setMachinesList] = useState([]);
   const navigate = useNavigate();
 
   // Ref for dropdown
   const dropdownRef = useRef(null);
+
+  const memoizedOutlet = useMemo(() => (
+    <Outlet  />
+  ), []);
 
   // Handle clicks outside the dropdown
   const handleClickOutside = (event) => {
@@ -106,14 +110,7 @@ function Dashboard() {
         <div className='text-3xl font-bold text-blue-500  border-b-2  pb-3'>Machine Status</div>
           <h1 className={`text-4xl font-bold flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}></h1>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
-            {/* Theme Toggle Button */}
-            <button onClick={toggleTheme} className="focus:outline-none">
-              {isDarkMode ? (
-                <FaMoon className="text-blue-500 text-2xl" />
-              ) : (
-                <FaSun className="text-yellow-500 text-2xl" />
-              )}
-            </button>
+
 
             {/* Welcome Message */}
             <div className={`p-3 rounded-lg shadow-sm flex items-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}
@@ -144,7 +141,9 @@ function Dashboard() {
         </div>
 
         {/* Machine Details */}
-        <Outlet context={{ isDarkMode, machineData }} />
+        
+         {memoizedOutlet}
+       
       </div>
     </div>
   );

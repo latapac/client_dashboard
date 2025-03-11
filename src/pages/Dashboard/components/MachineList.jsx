@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useOutletContext } from 'react-router-dom';
 import { getMachineData, getMachines } from '../../../backservice/backservice';
 
 function MachineList() {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.authSlice.userData);
-  const { isDarkMode } = useOutletContext();
   const [machinesList, setMachinesList] = useState([]);
   const [machineData, setMachineData] = useState({});
 
- 
+ const isDarkMode = false
   const prevTpRef = useRef({});
 
   const mstatus = ['STOP', 'RUNNING', 'IDLE', 'ABORTED'];
@@ -37,9 +35,6 @@ function MachineList() {
 
   
   const dataChange = (serialNumber, tp) => {
-    if (prevTpRef.current[serialNumber] === "") {
-        return true
-    }
     if (prevTpRef.current[serialNumber] === tp) {
       return false; // No change
     } else {
