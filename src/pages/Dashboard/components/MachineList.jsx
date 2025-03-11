@@ -13,6 +13,8 @@ function MachineList() {
      const [machinesList, setMachinesList] = useState([]);
      const [machineData,setMachineData] = useState({});
 
+     const mstatus = ["STOP","RUNNING","IDLE","ABORTED"]
+
      
      function isMoreThan20SecondsAgoUTC(isoString) {
       const inputDate = new Date(isoString);
@@ -65,7 +67,9 @@ function MachineList() {
     <ul className="space-y-3">
         {machinesList.length > 0 ? (
             machinesList.map((element) => {
-                const status = machineData[element.serial_number]?.d?.status[0];
+                const status = mstatus[Number(machineData[element.serial_number]?.d?.status)]
+                console.log(element);
+                
                 const oee = machineData[element.serial_number]?.d?.current_OEE[0];
                 
                 return (
@@ -84,9 +88,9 @@ function MachineList() {
                     >
                         <div className="flex items-center space-x-4">
                             <div className={`w-3 h-3 rounded-full 
-                                ${status === isMoreThan20SecondsAgoUTC(machineData?.ts) ? 'bg-green-500' : 
+                                ${isMoreThan20SecondsAgoUTC(machineData?.ts) ? 'bg-green-500' : 
                                   'bg-red-500'}
-                                animate-pulse`}
+                                `}
                             />
                             <span className="font-mono font-medium text-lg">
                                 {element.serial_number}
