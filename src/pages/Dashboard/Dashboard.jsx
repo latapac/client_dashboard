@@ -6,15 +6,15 @@ import 'chart.js/auto';
 import {  FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { Outlet } from 'react-router-dom';
 import logo from "/logo.png"
+import { useLocation } from 'react-router-dom';
 
 function Dashboard() {
   const userData = useSelector((state) => state.authSlice.userData);
-  const [currentMachine, setCurrentMachine] = useState(null);
-  const [machineData, setMachineData] = useState({});
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [machinesList, setMachinesList] = useState([]);
   const navigate = useNavigate();
+  const {pathname} = useLocation()
 
   // Ref for dropdown
   const dropdownRef = useRef(null);
@@ -29,7 +29,6 @@ function Dashboard() {
       setIsDropdownOpen(false);
     }
   };
-
   // Add event listener for outside clicks
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -44,9 +43,6 @@ function Dashboard() {
         .then((data) => {
           if (data) {
             setMachinesList(data);
-            if (machinesList) {
-              setCurrentMachine(machinesList[0].serial_number);
-            }
           }
         })
         .catch(() => {
@@ -68,7 +64,7 @@ function Dashboard() {
     if (logoutService()) {
       navigate('/login');
     }
-  };
+  };  
 
   return (
     <div className={`min-h-screen h-auto flex flex-col md:flex-row ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
@@ -80,7 +76,7 @@ function Dashboard() {
         <div className="p-4 flex flex-col justify-between h-screen max-h-screen">
           <div>
             <h1 className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer" onClick={() => navigate('/')}>
-            <i class="fa-solid fa-arrow-left"></i> Machines
+            {pathname=="/data"?(<i className="fa-solid fa-arrow-left"></i>):""} Machines
             </h1>
             <ul className="space-y-2">
               {machinesList.length > 0 ? (
