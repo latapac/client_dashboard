@@ -9,31 +9,24 @@ function MachineList() {
   const [machinesList, setMachinesList] = useState([]);
   const [machineData, setMachineData] = useState({});
 
- const isDarkMode = false
+  const isDarkMode = false;
   const prevTpRef = useRef({});
 
   const mstatus = ['STOP', 'RUNNING', 'IDLE', 'ABORTED'];
 
   function formatTimestamp(isoString) {
     const date = new Date(isoString);
-  
+
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
-    const day = date.getDate()
-    const month = date.getMonth()
-    const year = date.getFullYear()
-   
-    return `${hours}:${minutes}:${seconds} ${day}/${month+1}/${year}`;
-  }
-  
-  // Usage
-  const timestamp = "2025-03-07T11:28:15.295884";
-  console.log(formatTimestamp(timestamp)); 
-  // Output: "11:28:15.295 AM"
-  
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
 
-  
+    return `${hours}:${minutes}:${seconds} ${day}/${month + 1}/${year}`;
+  }
+
   const dataChange = (serialNumber, tp) => {
     if (prevTpRef.current[serialNumber] === tp) {
       return false; // No change
@@ -74,8 +67,7 @@ function MachineList() {
   }, [userData?.c_id]);
 
   return (
-    <div className="p-1 ">
-   
+    <div className="p-1">
       <ul className="space-y-1">
         {machinesList.length > 0 ? (
           machinesList.map((element) => {
@@ -83,14 +75,13 @@ function MachineList() {
             const oee = Number(machineData[element.serial_number]?.d?.current_OEE[0]).toFixed(2);
             const speed = machineData[element.serial_number]?.d?.current_speed[0];
             const ts = machineData[element.serial_number]?.ts; // Timestamp
-            
-            
+
             return (
               <li
                 key={element.serial_number}
                 onClick={() => navigate(`/data?serial_number=${element.serial_number}`)}
                 className={`
-                  group flex justify-between items-center p-4 rounded-lg cursor-pointer
+                  group flex flex-col md:flex-row justify-between items-center p-4 rounded-lg cursor-pointer
                   transition-all duration-300 ease-in-out transform hover:scale-[1.02]
                   ${
                     isDarkMode
@@ -106,18 +97,17 @@ function MachineList() {
                       dataChange(element.serial_number, ts) ? 'bg-green-500' : 'bg-red-500'
                     }`}
                   />
-                  <div className='flex flex-col'>
-                  <span className="font-mono font-medium text-lg">
-                    {element.serial_number}
-                    
-                  </span>
-                  <p className={`${!isDarkMode?'text-gray-800':'text-emerald-200'} font-mono`}>Last Data:{` ${formatTimestamp(ts)}`}</p>
+                  <div className="flex flex-col">
+                    <span className="font-mono font-medium text-lg">
+                      {element.serial_number}
+                    </span>
+                    <p className={`${!isDarkMode ? 'text-gray-800' : 'text-emerald-200'} font-mono`}>
+                      Last Data: {`${formatTimestamp(ts)}`}
+                    </p>
                   </div>
-                 
-                  
                 </div>
 
-                <div className="flex items-center space-x-6">
+                <div className="flex items-center space-x-6 mt-4 md:mt-0">
                   <div className="flex flex-col items-end">
                     <span
                       className={`text-sm font-semibold ${
