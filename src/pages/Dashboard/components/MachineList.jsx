@@ -27,9 +27,6 @@ function MachineList() {
     return `${hours}:${minutes}:${seconds} ${day}/${month+1}/${year}`;
   }
  
-  
-
-  
   const dataChange = (serialNumber, tp) => {
     if (prevTpRef.current[serialNumber] === tp) {
       return false; // No change
