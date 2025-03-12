@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import Login from './pages/Login.jsx';
-import { createHashRouter, RouterProvider } from 'react-router-dom'; // Import createHashRouter
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
 import { Provider } from 'react-redux';
 import store from './store/store.js';
@@ -9,7 +9,6 @@ import Protected from './components/AuthLayout.jsx';
 import MachineList from './pages/Dashboard/components/MachineList.jsx';
 import MachindeData from './pages/Dashboard/components/MachindeData.jsx';
 
-// Use createHashRouter instead of createBrowserRouter
 const router = createHashRouter([
   {
     path: '/login',

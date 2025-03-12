@@ -26,7 +26,11 @@ function MachineList() {
    
     return `${hours}:${minutes}:${seconds} ${day}/${month+1}/${year}`;
   }
- 
+  
+  // Usage
+  const timestamp = "2025-03-07T11:28:15.295884";
+  console.log(formatTimestamp(timestamp)); 
+  // Output: "11:28:15.295 AM"
   
 
   
