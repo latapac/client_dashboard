@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef,useMemo } from 'react'; // Added useRef
+import React, { useEffect, useState, useRef,useMemo } from 'react'; 
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getMachines, logoutService } from '../../backservice/backservice';
@@ -16,20 +16,17 @@ function Dashboard() {
   const navigate = useNavigate();
   const {pathname} = useLocation()
 
-  // Ref for dropdown
   const dropdownRef = useRef(null);
 
   const memoizedOutlet = useMemo(() => (
     <Outlet  />
   ), []);
 
-  // Handle clicks outside the dropdown
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
     }
   };
-  // Add event listener for outside clicks
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
