@@ -20,7 +20,6 @@ function MachineList() {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
-<<<<<<< HEAD
     const day = date.getDate();
     const month = date.getMonth();
     const year = date.getFullYear();
@@ -28,15 +27,6 @@ function MachineList() {
     return `${hours}:${minutes}:${seconds} ${day}/${month + 1}/${year}`;
   }
 
-=======
-    const day = date.getDate()
-    const month = date.getMonth()
-    const year = date.getFullYear()
-   
-    return `${hours}:${minutes}:${seconds} ${day}/${month+1}/${year}`;
-  }
-   
->>>>>>> 84af48124adcbd832323bc830629098f800ff0c0
   const dataChange = (serialNumber, tp) => {
     if (prevTpRef.current[serialNumber] === tp) {
       return false; // No change
