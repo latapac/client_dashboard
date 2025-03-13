@@ -85,3 +85,26 @@ export async function logoutService() {
     }
 }
 
+
+export async function getMachineUser(mid) {
+    try {
+        const response = await fetch("http://"+server+":3000/getOperator/"+mid);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        if (data.status==200) {
+            return data.user
+        }else{
+            console.log(data);
+            
+            return false
+        }
+  
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        return false
+    }
+}
+
+

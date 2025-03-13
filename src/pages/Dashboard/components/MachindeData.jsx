@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { useLocation } from 'react-router-dom';
-import { getMachineData } from '../../../backservice/backservice';
+import { getMachineData,getMachineUser } from '../../../backservice/backservice';
 
 function MachindeData() {
   const isDarkMode = false;
 
   const [machineData, setMachineData] = useState({});
+  const [user,setUser] = useState("")
 
   const mstatus = ['STOP', 'RUNNING', 'IDLE', 'ABORTED'];
 
@@ -99,6 +100,9 @@ function MachindeData() {
       getMachineData(serialNumber).then((data) => {
         setMachineData(data);
       });
+      getMachineUser(serialNumber).then((data)=>{
+        setUser(data)
+    })
     };
 
     fetchdata();
@@ -114,6 +118,12 @@ function MachindeData() {
     <>
       <div className="container mx-auto px-4 py-6">
         {/* Machine Status Section */}
+        <div className='flex min-w-full justify-end'>
+          <h3>{user}</h3>
+          <button
+            onClick={() => { navigate("/audit?serial_number=" + serialNumber) }}
+            className={`bg-blue-600 text-white p-2.5  rounded-lg`}>Audit Trail</button>
+        </div>
         <div className={`rounded-lg shadow-md p-4 mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
           <h6 className={`text-lg md:text-xl font-bold mb-3 flex flex-col sm:flex-row justify-between items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
             <span className="mb-2 sm:mb-0">
