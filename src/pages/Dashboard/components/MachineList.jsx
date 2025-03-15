@@ -23,7 +23,7 @@ function MachineList() {
     const month = date.getMonth();
     const year = date.getFullYear();
 
-    return `${hours}:${minutes}:${seconds} ${day}/${month + 1}/${year}`;
+    return ` ${year}/${month + 1}/${day} ${hours}:${minutes}:${seconds}`;
   }
 
   const dataChange = (tp) => {
@@ -37,9 +37,9 @@ function MachineList() {
     const isChanged = differenceInMilliseconds > 60000;
 
     if (isChanged) {
-      return 'bg-red-500';
+      return 'border-l-red-500';
     } else {
-      return 'bg-green-500';
+      return 'border-l-green-500';
     }
   };
 
@@ -103,6 +103,7 @@ function MachineList() {
                 key={element.serial_number}
                 onClick={() => navigate(`/data?serial_number=${element.serial_number}`)}
                 className={`
+                  border-l-[2rem] ${dataChange(ts)}
                   group flex flex-col md:flex-row justify-between items-start p-4 rounded-lg cursor-pointer
                   transition-all duration-300 ease-in-out transform hover:scale-[1.02]
                   ${isDarkMode
@@ -112,25 +113,22 @@ function MachineList() {
                   shadow-sm hover:shadow-md
                 `}
               >
-                <div className="flex items-center justify-start space-x-4">
-                  <div
+                <div className="flex items-center justify-start space-x-4 ">
+                  {/* <div
                     className={`w-5 h-5 rounded-full ${dataChange(ts)}`}
-                  />
+                  /> */}
                   <div className="flex flex-col">
-                    <span className="font-mono font-medium text-lg">
+                    <span className="font-mono font-medium text-xl">
                       {element.serial_number}
                     </span>
-                    <p className={`${!isDarkMode ? 'text-gray-800' : 'text-emerald-200'} font-mono`}>
-                      Last Data: {`${formatTimestamp(ts)}`}
+                    <p className={`text-gray-700 font-mono text-[0.8rem]`}>
+                       {`${formatTimestamp(ts)}`}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-6 mt-4 md:mt-0 gap-7">
-                  <div className="flex flex-col items-end">
-                    <span className={`capitalize md:text-xl font-bold ${getStatusColor(status)} text-slate-50 p-1 rounded-sm w-38 max-w-38 text-center`}>{status}</span>
-                  </div>
-
+                <div className="flex items-center space-x-6 mt-4 md:mt-0 gap-2">
+                
                   <div className="flex flex-col items-end max-w-2 ml-5">
                     <span
                       className={`text-sm font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-600'
@@ -151,12 +149,16 @@ function MachineList() {
                   </div>
                   <div className="flex flex-col items-end">
                     <span
-                      className={`text-sm font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-600'
+                      className={`text-[0.8rem] font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-600'
                         }`}
                     >
                       Speed
                     </span>
-                    <span className={`font-bold`}>{speed}</span>
+                    <span className={`font-bold text-xl`}>{speed}</span>
+                  </div>
+
+                  <div className="flex flex-col items-end">
+                    <span className={`capitalize md:text-xl font-bold ${getStatusColor(status)} text-slate-50 p-1 rounded-sm w-38 max-w-38 text-center`}>{status}</span>
                   </div>
 
                   <svg

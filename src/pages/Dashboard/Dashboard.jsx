@@ -12,6 +12,7 @@ function Dashboard() {
   const userData = useSelector((state) => state.authSlice.userData);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [machinesList, setMachinesList] = useState([]);
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -63,45 +64,55 @@ function Dashboard() {
     }
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
   return (
     <div className={`min-h-screen h-auto flex flex-col md:flex-row ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
       {/* Sidebar */}
-      <div className={`w-full h-auto md:w-64 shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'} md:h-auto`}>
-        <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
-          <img src={logo} className='h-5' alt="" /> PACMAC
-        </div>
-        <div className="p-4 flex flex-col justify-between h-auto max-h-screen">
-          <div>
-            <h1
-              className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer hidden md:block"
-              onClick={() => navigate('/')}
-            >
-              {pathname === "/data" ? (
-                <i className="fa-solid fa-arrow-left"></i>
-              ) : (
-                ""
-              )}
-              Machines
-            </h1>
-            <ul className="space-y-2 hidden md:block">
-              {machinesList.length > 0 ? (
-                machinesList.map((element) => (
-                  <li
-                    key={element.serial_number}
-                    onClick={() => {
-                      navigate(`/data?serial_number=${element.serial_number}`);
-                    }}
-                    className={`cursor-pointer p-2 rounded transition duration-200 
+
+      <div className={`w-auto h-auto md:${isMenuOpen ? 'w-64' : ''} shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'} md:h-auto `}>
+        <h1 onClick={toggleMenu} className='text-xl p-5'>
+          ☰
+        </h1>
+        <div className={`${isMenuOpen ? 'block' : 'hidden'}`}>
+          <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
+            <img src={logo} className='h-5' alt="" /> PACMAC
+          </div>
+          <div className="p-4 flex flex-col justify-between h-auto max-h-screen">
+            <div>
+              <h1
+                className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer hidden md:block"
+                onClick={() => navigate('/')}
+              >
+                {pathname === "/data" ? (
+                  <i className="fa-solid fa-arrow-left"></i>
+                ) : (
+                  ""
+                )}
+                Machines
+              </h1>
+              <ul className={`space-y-2 hidden md:block`}>
+                {machinesList.length > 0 ? (
+                  machinesList.map((element) => (
+                    <li
+                      key={element.serial_number}
+                      onClick={() => {
+                        navigate(`/data?serial_number=${element.serial_number}`);
+                      }}
+                      className={`cursor-pointer p-2 rounded transition duration-200 
                       ${isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'} 
                       hover:bg-blue-400 hover:text-white`}
-                  >
-                    {element.serial_number}
-                  </li>
-                ))
-              ) : (
-                <div className={isDarkMode ? 'text-white' : 'text-gray-800'}>No machines available</div>
-              )}
-            </ul>
+                    >
+                      {element.serial_number}
+                    </li>
+                  ))
+                ) : (
+                  <div className={isDarkMode ? 'text-white' : 'text-gray-800'}>No machines available</div>
+                )}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -119,20 +130,6 @@ function Dashboard() {
           {/* User Info and Logout */}
           <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
             {/* Welcome Message */}
-            <div
-              className={`md:p-3 rounded-lg shadow-sm hidden md:flex items-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'} hover:drop-shadow-xl`}
-            >
-              <span
-                className={`mr-2 text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}
-              >
-                Welcome,
-              </span>
-              <span
-                className={`font-semibold text-lg ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}
-              >
-                {userData?.username}
-              </span>
-            </div>
 
             {/* Logout Dropdown */}
             <div className="relative" ref={dropdownRef}>
@@ -146,15 +143,22 @@ function Dashboard() {
               </button>
               {isDropdownOpen && (
                 <div
-                  className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${isDarkMode ? 'bg-gray-700' : 'bg-white'
+                  className={`absolute right-0 z-10 mt-2 w-48 rounded-md shadow-lg ${isDarkMode ? 'bg-gray-700' : 'bg-white'
                     }`}
                 >
+                  <div>
+                    <span
+                      className={`font-semibold text-center w-full text-sm ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}
+                    >
+                      {userData?.username}
+                    </span>
+                  </div>
                   <div className="md:py-1">
                     <button
                       onClick={handleLogout}
                       className={`block w-full px-4 py-2 text-sm ${isDarkMode
-                          ? 'text-gray-300 hover:bg-gray-600'
-                          : 'text-gray-800 hover:bg-gray-200'
+                        ? 'text-gray-300 hover:bg-gray-600'
+                        : 'text-gray-800 hover:bg-gray-200'
                         }`}
                     >
                       <FaSignOutAlt className="inline-block mr-2" /> Logout
