@@ -11,7 +11,6 @@ function MachineList() {
 
   const isDarkMode = false;
 
-
   const mstatus = ['STOP', 'RUNNING', 'IDLE', 'ABORTED'];
 
   function formatTimestamp(isoString) {
@@ -28,16 +27,14 @@ function MachineList() {
   }
 
   const dataChange = (tp) => {
-
-
+    
+    if(tp===undefined){
+      return 'bg-red-500';
+    }
     const date = new Date(tp);
-
     const currentTime = new Date();
-
-   
     const differenceInMilliseconds = currentTime - date;
     const isChanged = differenceInMilliseconds > 60000;
-
 
     if (isChanged) {
       return 'bg-red-500';
