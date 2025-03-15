@@ -89,8 +89,8 @@ function MachineList() {
   }, [userData?.c_id]);
 
   return (
-    <div className="p-1">
-      <ul className="space-y-1">
+    <div className="md:p-1">
+      <ul className="md:space-y-1">
         {machinesList.length > 0 ? (
           machinesList.map((element) => {
             const status = mstatus[Number(machineData[element.serial_number]?.d?.status)];

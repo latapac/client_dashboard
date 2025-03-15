@@ -108,73 +108,67 @@ function Dashboard() {
 
       {/* Main Content */}
       <div className="flex-1 p-4 sm:p-6 md:p-8">
-  {/* Header */}
-  <div className="flex flex-col md:flex-row justify-between items-baseline mb-8 space-y-4 md:space-y-0 md:space-x-8">
-    {/* Title */}
-    <div className="text-3xl font-bold text-blue-500 border-b-2 pb-3 md:pb-0">
-      Machine Status
-    </div>
+        {/* Header */}
+        <div className="flex md:flex-row justify-between items-baseline mb-8 space-y-4 md:space-y-0 md:space-x-8">
+          {/* Title */}
+          <div className="text-sm md:text-3xl font-bold text-blue-500 border-b-2 pb-3 md:pb-0">
+            Machine Status
+          </div>
 
-    {/* Empty Heading (can be customized later) */}
-    <h1
-      className={`text-4xl font-bold flex items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}
-    ></h1>
 
-    {/* User Info and Logout */}
-    <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-      {/* Welcome Message */}
-      <div
-        className={`p-3 rounded-lg shadow-sm flex items-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'} hover:drop-shadow-xl`}
-      >
-        <span
-          className={`mr-2 text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}
-        >
-          Welcome,
-        </span>
-        <span
-          className={`font-semibold text-lg ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}
-        >
-          {userData?.username}
-        </span>
-      </div>
-
-      {/* Logout Dropdown */}
-      <div className="relative" ref={dropdownRef}>
-        <button
-          onClick={toggleDropdown}
-          className="flex items-center focus:outline-none hover:shadow-cyan-500"
-        >
-          <FaUser
-            className={`text-2xl ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}
-          />
-        </button>
-        {isDropdownOpen && (
-          <div
-            className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${
-              isDarkMode ? 'bg-gray-700' : 'bg-white'
-            }`}
-          >
-            <div className="py-1">
-              <button
-                onClick={handleLogout}
-                className={`block w-full px-4 py-2 text-sm ${
-                  isDarkMode
-                    ? 'text-gray-300 hover:bg-gray-600'
-                    : 'text-gray-800 hover:bg-gray-200'
-                }`}
+          {/* User Info and Logout */}
+          <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+            {/* Welcome Message */}
+            <div
+              className={`md:p-3 rounded-lg shadow-sm hidden md:flex items-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'} hover:drop-shadow-xl`}
+            >
+              <span
+                className={`mr-2 text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}
               >
-                <FaSignOutAlt className="inline-block mr-2" /> Logout
+                Welcome,
+              </span>
+              <span
+                className={`font-semibold text-lg ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}
+              >
+                {userData?.username}
+              </span>
+            </div>
+
+            {/* Logout Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={toggleDropdown}
+                className="flex items-center focus:outline-none hover:shadow-cyan-500"
+              >
+                <FaUser
+                  className={`text-sm md:text-2xl ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}
+                />
               </button>
+              {isDropdownOpen && (
+                <div
+                  className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${isDarkMode ? 'bg-gray-700' : 'bg-white'
+                    }`}
+                >
+                  <div className="md:py-1">
+                    <button
+                      onClick={handleLogout}
+                      className={`block w-full px-4 py-2 text-sm ${isDarkMode
+                          ? 'text-gray-300 hover:bg-gray-600'
+                          : 'text-gray-800 hover:bg-gray-200'
+                        }`}
+                    >
+                      <FaSignOutAlt className="inline-block mr-2" /> Logout
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        )}
-      </div>
-    </div>
-  </div>
+        </div>
 
-  {/* Machine Details */}
-  {memoizedOutlet}
-</div>
+        {/* Machine Details */}
+        {memoizedOutlet}
+      </div>
 
     </div>
   );
