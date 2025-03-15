@@ -73,7 +73,7 @@ function Dashboard() {
         <div className="p-4 flex flex-col justify-between h-auto max-h-screen">
           <div>
             <h1
-              className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer"
+              className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer hidden md:block"
               onClick={() => navigate('/')}
             >
               {pathname === "/data" ? (
@@ -83,7 +83,7 @@ function Dashboard() {
               )}
               Machines
             </h1>
-            <ul className="space-y-2">
+            <ul className="space-y-2 hidden md:block">
               {machinesList.length > 0 ? (
                 machinesList.map((element) => (
                   <li

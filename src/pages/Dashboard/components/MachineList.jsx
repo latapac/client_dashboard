@@ -43,6 +43,21 @@ function MachineList() {
     }
   };
 
+  function getStatusColor(status) {
+    switch (status) {
+      case 'STOP':
+        return 'bg-red-500';
+      case 'RUNNING':
+        return 'bg-green-500';
+      case 'IDLE':
+        return 'bg-yellow-500';
+      case 'ABORTED':
+        return 'bg-orange-300';
+      default:
+        return 'bg-gray-500';
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       if (userData?.c_id) {
@@ -88,7 +103,7 @@ function MachineList() {
                 key={element.serial_number}
                 onClick={() => navigate(`/data?serial_number=${element.serial_number}`)}
                 className={`
-                  group flex flex-col md:flex-row justify-between items-center p-4 rounded-lg cursor-pointer
+                  group flex flex-col md:flex-row justify-between items-start p-4 rounded-lg cursor-pointer
                   transition-all duration-300 ease-in-out transform hover:scale-[1.02]
                   ${isDarkMode
                     ? 'bg-slate-700 hover:bg-slate-600 text-white'
@@ -97,7 +112,7 @@ function MachineList() {
                   shadow-sm hover:shadow-md
                 `}
               >
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-start space-x-4">
                   <div
                     className={`w-5 h-5 rounded-full ${dataChange(ts)}`}
                   />
@@ -111,18 +126,12 @@ function MachineList() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-6 mt-4 md:mt-0">
+                <div className="flex items-center space-x-6 mt-4 md:mt-0 gap-7">
                   <div className="flex flex-col items-end">
-                    <span
-                      className={`text-sm font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-600'
-                        }`}
-                    >
-                      Status
-                    </span>
-                    <span className="capitalize">{status}</span>
+                    <span className={`capitalize md:text-xl font-bold ${getStatusColor(status)} text-slate-50 p-1 rounded-sm w-38 max-w-38 text-center`}>{status}</span>
                   </div>
 
-                  <div className="flex flex-col items-end">
+                  <div className="flex flex-col items-end max-w-2 ml-5">
                     <span
                       className={`text-sm font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-600'
                         }`}

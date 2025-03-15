@@ -1,3 +1,5 @@
+
+const server = "64.227.139.217"
 export async function loginService(username, password) {
     try {
         const data = await fetch("http://64.227.139.217:3000/login", {
