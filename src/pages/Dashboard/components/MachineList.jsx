@@ -28,14 +28,14 @@ function MachineList() {
   }
 
   const dataChange = (serialNumber, tp) => {
-    if (prevTpRef.current[serialNumber] === tp) {
-      return 'bg-orange-500'
-    }
-    else if (prevTpRef.current[serialNumber] === tp) {
-      return 'bg-red-500'
+    if (prevTpRef.current[serialNumber] === undefined) {
+      prevTpRef.current[serialNumber] = tp;
+      return 'bg-orange-500';
+    } else if (prevTpRef.current[serialNumber] === tp) {
+      return 'bg-red-500';
     } else {
       prevTpRef.current[serialNumber] = tp;
-      return  'bg-green-500'
+      return 'bg-green-500';
     }
   };
 
