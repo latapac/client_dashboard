@@ -29,10 +29,13 @@ function MachineList() {
 
   const dataChange = (serialNumber, tp) => {
     if (prevTpRef.current[serialNumber] === tp) {
-      return false; // No change
+      return 'bg-orange-500'
+    }
+    else if (prevTpRef.current[serialNumber] === tp) {
+      return 'bg-red-500'
     } else {
       prevTpRef.current[serialNumber] = tp;
-      return true;
+      return  'bg-green-500'
     }
   };
 
@@ -74,7 +77,7 @@ function MachineList() {
             const status = mstatus[Number(machineData[element.serial_number]?.d?.status)];
             const oee = Number(machineData[element.serial_number]?.d?.current_OEE[0]).toFixed(2);
             const speed = machineData[element.serial_number]?.d?.current_speed[0];
-            const ts = machineData[element.serial_number]?.ts; // Timestamp
+            const ts = machineData[element.serial_number]?.ts; 
 
             return (
               <li
@@ -94,8 +97,7 @@ function MachineList() {
                 <div className="flex items-center space-x-4">
                   <div
                     className={`w-5 h-5 rounded-full ${
-                      dataChange(element.serial_number, ts) ? 'bg-green-500' : 'bg-red-500'
-                    }`}
+                      dataChange(element.serial_number, ts)}`}
                   />
                   <div className="flex flex-col">
                     <span className="font-mono font-medium text-lg">
