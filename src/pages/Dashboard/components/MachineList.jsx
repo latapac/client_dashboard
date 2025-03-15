@@ -10,7 +10,7 @@ function MachineList() {
   const [machineData, setMachineData] = useState({});
 
   const isDarkMode = false;
-  const prevTpRef = useRef({});
+
 
   const mstatus = ['STOP', 'RUNNING', 'IDLE', 'ABORTED'];
 
@@ -27,14 +27,21 @@ function MachineList() {
     return `${hours}:${minutes}:${seconds} ${day}/${month + 1}/${year}`;
   }
 
-  const dataChange = (serialNumber, tp) => {
-    if (prevTpRef.current[serialNumber] === undefined) {
-      prevTpRef.current[serialNumber] = tp;
-      return 'bg-orange-500';
-    } else if (prevTpRef.current[serialNumber] === tp) {
+  const dataChange = (tp) => {
+
+
+    const date = new Date(tp);
+
+    const currentTime = new Date();
+
+   
+    const differenceInMilliseconds = currentTime - date;
+    const isChanged = differenceInMilliseconds > 60000;
+
+
+    if (isChanged) {
       return 'bg-red-500';
     } else {
-      prevTpRef.current[serialNumber] = tp;
       return 'bg-green-500';
     }
   };
@@ -64,7 +71,7 @@ function MachineList() {
 
     const intervalId = setInterval(() => {
       fetchData();
-    }, 35000);
+    }, 5000);
 
     return () => clearInterval(intervalId);
   }, [userData?.c_id]);
@@ -77,7 +84,7 @@ function MachineList() {
             const status = mstatus[Number(machineData[element.serial_number]?.d?.status)];
             const oee = Number(machineData[element.serial_number]?.d?.current_OEE[0]).toFixed(2);
             const speed = machineData[element.serial_number]?.d?.current_speed[0];
-            const ts = machineData[element.serial_number]?.ts; 
+            const ts = machineData[element.serial_number]?.ts;
 
             return (
               <li
@@ -86,18 +93,16 @@ function MachineList() {
                 className={`
                   group flex flex-col md:flex-row justify-between items-center p-4 rounded-lg cursor-pointer
                   transition-all duration-300 ease-in-out transform hover:scale-[1.02]
-                  ${
-                    isDarkMode
-                      ? 'bg-slate-700 hover:bg-slate-600 text-white'
-                      : 'bg-white hover:bg-blue-50 text-slate-700 border border-slate-200'
+                  ${isDarkMode
+                    ? 'bg-slate-700 hover:bg-slate-600 text-white'
+                    : 'bg-white hover:bg-blue-50 text-slate-700 border border-slate-200'
                   }
                   shadow-sm hover:shadow-md
                 `}
               >
                 <div className="flex items-center space-x-4">
                   <div
-                    className={`w-5 h-5 rounded-full ${
-                      dataChange(element.serial_number, ts)}`}
+                    className={`w-5 h-5 rounded-full ${dataChange(ts)}`}
                   />
                   <div className="flex flex-col">
                     <span className="font-mono font-medium text-lg">
@@ -112,9 +117,8 @@ function MachineList() {
                 <div className="flex items-center space-x-6 mt-4 md:mt-0">
                   <div className="flex flex-col items-end">
                     <span
-                      className={`text-sm font-semibold ${
-                        isDarkMode ? 'text-slate-300' : 'text-slate-600'
-                      }`}
+                      className={`text-sm font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-600'
+                        }`}
                     >
                       Status
                     </span>
@@ -123,29 +127,26 @@ function MachineList() {
 
                   <div className="flex flex-col items-end">
                     <span
-                      className={`text-sm font-semibold ${
-                        isDarkMode ? 'text-slate-300' : 'text-slate-600'
-                      }`}
+                      className={`text-sm font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-600'
+                        }`}
                     >
                       OEE
                     </span>
                     <span
-                      className={`font-bold ${
-                        oee >= 80
-                          ? 'text-green-600'
-                          : oee >= 60
+                      className={`font-bold ${oee >= 80
+                        ? 'text-green-600'
+                        : oee >= 60
                           ? 'text-yellow-600'
                           : 'text-red-600'
-                      }`}
+                        }`}
                     >
                       {oee}%
                     </span>
                   </div>
                   <div className="flex flex-col items-end">
                     <span
-                      className={`text-sm font-semibold ${
-                        isDarkMode ? 'text-slate-300' : 'text-slate-600'
-                      }`}
+                      className={`text-sm font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-600'
+                        }`}
                     >
                       Speed
                     </span>
@@ -154,9 +155,8 @@ function MachineList() {
 
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className={`h-5 w-5 ${
-                      isDarkMode ? 'text-blue-300' : 'text-blue-600'
-                    } transform transition-transform group-hover:translate-x-1`}
+                    className={`h-5 w-5 ${isDarkMode ? 'text-blue-300' : 'text-blue-600'
+                      } transform transition-transform group-hover:translate-x-1`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -174,9 +174,8 @@ function MachineList() {
           })
         ) : (
           <div
-            className={`text-center p-8 rounded-lg ${
-              isDarkMode ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'
-            }`}
+            className={`text-center p-8 rounded-lg ${isDarkMode ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-600'
+              }`}
           >
             <span className="text-lg">No machines found in inventory</span>
             <p className="text-sm mt-2 text-slate-500">Add new machines to get started</p>
