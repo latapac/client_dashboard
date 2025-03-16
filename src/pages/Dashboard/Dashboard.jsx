@@ -73,9 +73,7 @@ function Dashboard() {
       {/* Sidebar */}
 
       <div className={`sticky top-0 left-0 self-start w-auto md:${isMenuOpen?"w-64":""} shadow-lg h-screen overflow-y-auto ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
-        <h1 onClick={toggleMenu} className='text-xl p-5 hover:cursor-pointer'>
-          ☰
-        </h1>
+       
         <div className={`${isMenuOpen ? 'block' : 'hidden'}`}>
           <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
             <img src={logo} className='h-5' alt="" /> 
@@ -84,9 +82,9 @@ function Dashboard() {
             <div>
               <h1
                 className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer hidden md:block"
-                onClick={() => navigate('/')}
+                onClick={() => navigate(-1)}
               >
-                {pathname === "/data" ? (
+                {pathname !== "/" ? (
                   <i className="fa-solid fa-arrow-left"></i>
                 ) : (
                   ""
@@ -115,6 +113,9 @@ function Dashboard() {
             </div>
           </div>
         </div>
+        <h1 onClick={toggleMenu} className={`text-xl p-5 ${isMenuOpen?'mt-[43vh]':"mt-[90vh]"} hover:cursor-pointer`}>
+          ☰
+        </h1>
       </div>
 
       {/* Main Content */}

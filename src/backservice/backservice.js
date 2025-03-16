@@ -1,8 +1,8 @@
-
 const server = "64.227.139.217"
+
 export async function loginService(username, password) {
     try {
-        const data = await fetch("http://64.227.139.217:3000/login", {
+        const data = await fetch("http://"+server+":3000/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json", // specify the content type
@@ -42,7 +42,7 @@ export function checkLoginService(){
 
 export async function getMachines(cid) {
     try {
-        const data = await fetch("http://64.227.139.217:3000/getMachine/"+cid)
+        const data = await fetch("http://"+server+":3000/getMachine/"+cid)
         const md = await data.json()
         if (md.status==200) {
             return md.data
@@ -57,7 +57,7 @@ export async function getMachines(cid) {
 
 export async function getMachineData(mid) {
     try {
-        const response = await fetch('http://64.227.139.217:3000/getMachineData/'+mid);
+        const response = await fetch("http://"+server+":3000/getMachineData/"+mid);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -76,16 +76,29 @@ export async function getMachineData(mid) {
     }
 }
 
-export async function logoutService() {
-    try {     
-        localStorage.clear("username")
-        localStorage.clear("secret")
-        return true
+
+
+export async function getAuditTrailData(mid) {
+    try {
+        const response = await fetch("http://"+server+":3000/getAuditTraildata/"+mid);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        if (data.status==200) {
+            return data.data
+        }else{
+            console.log(data);
+            
+            return false
+        }
+  
     } catch (error) {
-        console.log(error);
+        console.error('There was a problem with the fetch operation:', error);
         return false
     }
 }
+
 
 
 export async function getMachineUser(mid) {
@@ -110,3 +123,13 @@ export async function getMachineUser(mid) {
 }
 
 
+export async function logoutService() {
+    try {     
+        localStorage.clear("username")
+        localStorage.clear("secret")
+        return true
+    } catch (error) {
+        console.log(error);
+        return false
+    }
+}
