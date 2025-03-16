@@ -43,12 +43,6 @@ function AuditTrail() {
     return (
         <>
             <div className="m-5 overflow-x-auto rounded-lg shadow-lg">
-                    <div>
-                    <span>SHOW ENTRIES</span>
-                    <select>
-                        <option >10</option>
-                    </select>
-                    </div>
                 <table className="min-w-full bg-white dark:bg-gray-800">
                     <thead className="bg-blue-500">
                         <tr>
@@ -69,7 +63,8 @@ function AuditTrail() {
 
                     {/* Table Body */}
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {currentItems?.map((data) => (
+                        {currentItems?.map((data) => { 
+                            return(
                             <tr key={data._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                     {formatTimestamp(data?.ts)}
@@ -84,7 +79,7 @@ function AuditTrail() {
                                     {data?.d?.User !== undefined ? data?.d?.User[0] === "" ? "SYSTEM" : data?.d?.User[0] : "NULL"}
                                 </td>
                             </tr>
-                        ))}
+                        )})}
                     </tbody>
                 </table>
             </div>
