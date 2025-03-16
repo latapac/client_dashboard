@@ -9,7 +9,7 @@ function AuditTrail() {
 
     const [auditData, setAuditData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage,setItemsPerPage] = useState(50); 
+    const [itemsPerPage,setItemsPerPage] = useState(10); 
 
     function formatTimestamp(isoString) {
         const date = new Date(isoString);
