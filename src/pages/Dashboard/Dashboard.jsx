@@ -17,6 +17,13 @@ function Dashboard() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+   const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const serialNumber = queryParams.get('serial_number');
+
+
+    
+
   const dropdownRef = useRef(null);
 
   const memoizedOutlet = useMemo(() => (
@@ -119,12 +126,12 @@ function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 sm:p-6 md:p-8">
+      <div className="flex-1 p-4 sm:p-6 md:p-4">
         {/* Header */}
-        <div className="flex md:flex-row justify-between items-baseline mb-8 space-y-4 md:space-y-0 md:space-x-8">
+        <div className="flex md:flex-row justify-between items-baseline mb-4 space-y-4 md:space-y-0 md:space-x-8">
           {/* Title */}
           <div className="text-sm md:text-3xl font-bold font-stretch-ultra-condensed text-blue-500 border-b-2 pb-3 md:pb-0">
-            Machines
+            {pathname==="/audit"?serialNumber:"Machine"}
           </div>
 
 
