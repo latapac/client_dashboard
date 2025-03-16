@@ -20,7 +20,7 @@ function AuditTrail() {
         getAuditTrailData(serialNumber).then((data) => {
             setAuditData(data);
             setFilteredData(data);
-        });
+        });}
         fetchData();
 
         const intervalId = setInterval(() => {
@@ -28,7 +28,7 @@ function AuditTrail() {
         }, 4000);
     
         return () => clearInterval(intervalId);
-    }
+    
     }, [serialNumber]);
 
     function formatTimestamp(isoString) {
