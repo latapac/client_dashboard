@@ -30,6 +30,7 @@ function AuditTrail() {
                 setAuditData(data);
             });
         }
+        fetchData()
         const intervalId = setInterval(() => {
             fetchData();
           }, 4000);
