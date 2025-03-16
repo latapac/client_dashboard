@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getMachineData, getMachines } from '../../../backservice/backservice';
+import { getMachineData, getMachines, getMachineUser } from '../../../backservice/backservice';
 
 function MachineList() {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.authSlice.userData);
   const [machinesList, setMachinesList] = useState([]);
   const [machineData, setMachineData] = useState({});
+  const [machineUsers, setMachineUsers] = useState({})
 
   const isDarkMode = false;
 
@@ -27,8 +28,8 @@ function MachineList() {
   }
 
   const dataChange = (tp) => {
-    
-    if(tp===undefined){
+
+    if (tp === undefined) {
       return 'bg-red-500';
     }
     const date = new Date(tp);
@@ -71,7 +72,13 @@ function MachineList() {
                 ...prevData,
                 [machine.serial_number]: mdata,
               }));
+              const user = await getMachineUser(machine.serial_number);
+              setMachineUsers((prevUsers) => ({
+                ...prevUsers,
+                [machine.serial_number]: user === "" ? "NO USER" : user,
+              }));
             });
+
           }
         } catch (error) {
           console.log('machines fetch failed');
@@ -97,6 +104,7 @@ function MachineList() {
             const oee = Number(machineData[element.serial_number]?.d?.current_OEE[0]).toFixed(2);
             const speed = machineData[element.serial_number]?.d?.current_speed[0];
             const ts = machineData[element.serial_number]?.ts;
+            const user = machineUsers[element.serial_number]
 
             return (
               <li
@@ -114,21 +122,22 @@ function MachineList() {
                 `}
               >
                 <div className="flex items-center justify-start space-x-4 ">
-                  {/* <div
-                    className={`w-5 h-5 rounded-full ${dataChange(ts)}`}
-                  /> */}
+
                   <div className="flex flex-col">
                     <span className="font-mono font-medium text-xl">
                       {element.serial_number}
                     </span>
                     <p className={`text-gray-700 font-mono text-[0.8rem]`}>
-                       {`${formatTimestamp(ts)}`}
+                      {`${formatTimestamp(ts)}`}
                     </p>
+                  </div>
+                  <div>
+                    {user}
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-6 mt-4 md:mt-0 gap-2">
-                
+
                   <div className="flex flex-col items-end max-w-2 ml-5">
                     <span
                       className={`text-sm font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-600'
@@ -137,7 +146,7 @@ function MachineList() {
                       OEE
                     </span>
                     <span
-                      className={`font-bold ${oee >= 80
+                      className={`font-bold text-sm md:text-lg ${oee >= 80
                         ? 'text-green-600'
                         : oee >= 60
                           ? 'text-yellow-600'

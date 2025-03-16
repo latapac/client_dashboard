@@ -72,13 +72,13 @@ function Dashboard() {
     <div className={`min-h-screen h-auto flex flex-col md:flex-row ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
       {/* Sidebar */}
 
-      <div className={`w-auto h-auto md:${isMenuOpen ? 'w-64' : ''} shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'} md:h-auto `}>
-        <h1 onClick={toggleMenu} className='text-xl p-5'>
+      <div className={`sticky top-0 left-0 self-start w-auto md:${isMenuOpen?"w-64":""} shadow-lg h-screen overflow-y-auto ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
+        <h1 onClick={toggleMenu} className='text-xl p-5 hover:cursor-pointer'>
           ☰
         </h1>
         <div className={`${isMenuOpen ? 'block' : 'hidden'}`}>
           <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
-            <img src={logo} className='h-5' alt="" /> PACMAC
+            <img src={logo} className='h-5' alt="" /> 
           </div>
           <div className="p-4 flex flex-col justify-between h-auto max-h-screen">
             <div>
@@ -122,8 +122,8 @@ function Dashboard() {
         {/* Header */}
         <div className="flex md:flex-row justify-between items-baseline mb-8 space-y-4 md:space-y-0 md:space-x-8">
           {/* Title */}
-          <div className="text-sm md:text-3xl font-bold text-blue-500 border-b-2 pb-3 md:pb-0">
-            Machine Status
+          <div className="text-sm md:text-3xl font-bold font-stretch-ultra-condensed text-blue-500 border-b-2 pb-3 md:pb-0">
+            Machines
           </div>
 
 
