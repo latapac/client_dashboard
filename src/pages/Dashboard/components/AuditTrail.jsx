@@ -16,10 +16,19 @@ function AuditTrail() {
     const itemsPerPage = 16;
 
     useEffect(() => {
+        const fetchData = ()=>{
         getAuditTrailData(serialNumber).then((data) => {
             setAuditData(data);
             setFilteredData(data);
         });
+        fetchData();
+
+        const intervalId = setInterval(() => {
+          fetchData();
+        }, 4000);
+    
+        return () => clearInterval(intervalId);
+    }
     }, [serialNumber]);
 
     function formatTimestamp(isoString) {
