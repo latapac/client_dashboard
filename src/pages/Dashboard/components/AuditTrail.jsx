@@ -25,9 +25,16 @@ function AuditTrail() {
     }
 
     useEffect(() => {
-        getAuditTrailData(serialNumber).then((data) => {
-            setAuditData(data);
-        });
+        const fetchData = ()=>{
+            getAuditTrailData(serialNumber).then((data) => {
+                setAuditData(data);
+            });
+        }
+        const intervalId = setInterval(() => {
+            fetchData();
+          }, 4000);
+      
+          return () => clearInterval(intervalId);
     }, [serialNumber]);
 
 
