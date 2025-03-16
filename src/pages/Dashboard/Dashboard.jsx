@@ -78,7 +78,7 @@ function Dashboard() {
           <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
             <img src={logo} className='h-5' alt="" /> 
           </div>
-          <div className="p-4 flex flex-col justify-between h-auto max-h-screen">
+          <div className="p-4 hidden md:flex flex-col justify-between h-auto max-h-screen">
             <div>
               <h1
                 className="text-2xl text-blue-500 font-bold p-3 hover:cursor-pointer hidden md:block"
