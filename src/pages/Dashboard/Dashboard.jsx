@@ -22,7 +22,7 @@ function Dashboard() {
     const serialNumber = queryParams.get('serial_number');
 
 
-    
+   
 
   const dropdownRef = useRef(null);
 
@@ -83,7 +83,7 @@ function Dashboard() {
        
         <div className={`${isMenuOpen ? 'block' : 'hidden'}`}>
           <div className={`p-4 flex justify-center items-center text-2xl font-serif border-b-2 mb-1 ${isDarkMode ? 'border-blue-500 text-slate-50' : 'border-blue-300 text-gray-800'}`}>
-            <img src={logo} className='h-5' alt="" /> 
+            <img src={logo} className='h-5' alt="" />
           </div>
           <div className="p-4 hidden md:flex flex-col justify-between h-auto max-h-screen">
             <div>
@@ -106,8 +106,8 @@ function Dashboard() {
                       onClick={() => {
                         navigate(`/data?serial_number=${element.serial_number}`);
                       }}
-                      className={`cursor-pointer p-2 rounded transition duration-200 
-                      ${isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'} 
+                      className={`cursor-pointer p-2 rounded transition duration-200
+                      ${isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'}
                       hover:bg-blue-400 hover:text-white`}
                     >
                       {element.serial_number}
@@ -126,57 +126,7 @@ function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 sm:p-6 md:p-4">
-        {/* Header */}
-        <div className="flex md:flex-row justify-between items-baseline mb-4 space-y-4 md:space-y-0 md:space-x-8">
-          {/* Title */}
-          <div className="text-sm md:text-3xl font-bold font-stretch-ultra-condensed text-blue-500 border-b-2 pb-3 md:pb-0">
-            {pathname==="/audit"?serialNumber:"Machine"}
-          </div>
-
-
-          {/* User Info and Logout */}
-          <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-            {/* Welcome Message */}
-
-            {/* Logout Dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={toggleDropdown}
-                className="flex items-center focus:outline-none hover:shadow-cyan-500"
-              >
-                <FaUser
-                  className={`text-sm md:text-2xl ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}
-                />
-              </button>
-              {isDropdownOpen && (
-                <div
-                  className={`absolute right-0 z-10 mt-2 w-48 rounded-md shadow-lg ${isDarkMode ? 'bg-gray-700' : 'bg-white'
-                    }`}
-                >
-                  <div>
-                    <span
-                      className={`font-semibold text-center w-full text-sm ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}
-                    >
-                      {userData?.username}
-                    </span>
-                  </div>
-                  <div className="md:py-1">
-                    <button
-                      onClick={handleLogout}
-                      className={`block w-full px-4 py-2 text-sm ${isDarkMode
-                        ? 'text-gray-300 hover:bg-gray-600'
-                        : 'text-gray-800 hover:bg-gray-200'
-                        }`}
-                    >
-                      <FaSignOutAlt className="inline-block mr-2" /> Logout
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+      <div className="flex-1">
 
         {/* Machine Details */}
         {memoizedOutlet}
@@ -187,3 +137,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+

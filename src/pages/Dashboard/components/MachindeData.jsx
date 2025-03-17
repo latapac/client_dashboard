@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getMachineData,getMachineUser } from '../../../backservice/backservice';
+import {Bar} from 'react-chartjs-2'; 
+import model from '/model.jpg';
 
 function MachindeData() {
   const isDarkMode = false;
@@ -61,7 +63,9 @@ function MachindeData() {
       },
     },
   };
-
+  const totalProduction=machineData?.d?.Total_Production;
+  const goodProduction=machineData?.d?.Good_Count;
+  const badProduction=machineData?.d?.Reject_Counters;
   const oeeValue = machineData?.d?.current_OEE ? Number(machineData.d.current_OEE).toFixed(2) : '0.00';
   const performance = machineData?.d?.Performance ? Number(machineData.d.Performance).toFixed(2) : '0.00';
   const availability = machineData?.d?.Availability ? Number(machineData.d.Availability).toFixed(2) : '0.00';
@@ -118,136 +122,200 @@ function MachindeData() {
 
   return (
     <>
-      <div className="container mx-auto px-4 py-6">
-        {/* Machine Status Section */}
-        <div className='flex min-w-full justify-end'>
-          <h3>{user}</h3>
-          <button
-            onClick={() => { navigate("/audit?serial_number=" + serialNumber) }}
-            className={`bg-blue-600 text-white p-2.5 rounded-lg hover:cursor-pointer`}>Audit Trail</button>
+      <div className={`bg-gray-200 min-w-3xl max-w-8xl  ${isDarkMode ? 'dark' : ''}`}>
+      {/* Header */}
+      <div className='bg-blue-500 h-16 flex items-center min-w-3xl  max-w-8xl shadow-md'>
+        <p className='text-2xl font-bold text-white ml-5'>PACMAC</p>
+        <div>
+
         </div>
-        <div className={`rounded-lg shadow-md p-4 mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-          <h6 className={`text-lg md:text-xl font-bold mb-3 flex flex-col sm:flex-row justify-between items-center ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-            <span className="mb-2 sm:mb-0">
-              Serial No. {machineData?.serial_number}
-            </span>
-            <span className="text-sm sm:text-base">
-              Status: {' '}
-              <span className={getStatusColor(mstatus[Number(machineData?.d?.status)])}>
-                {mstatus[Number(machineData?.d?.status)]}
-              </span>
-            </span>
-          </h6>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {['current_speed', 'Batch_Number', 'Reciepe_Name'].map((key, index) => (
-              <div key={index} className={`p-2 rounded-lg shadow-sm flex flex-col sm:flex-row items-center justify-between ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                <p className={`text-sm sm:text-base font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-800'} mb-1 sm:mb-0`}>
-                  {key.replace(/_/g, ' ')}
-                </p>
-                <p className={`text-base sm:text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-                  {machineData?.d?.[key]}
-                </p>
+      </div>
+ 
+      {/* Navigation Bar */}
+      <div className='flex flex-row justify-evenly mt-1 py-2 min-w-3xl max-w-8xl gap-1'>
+        {['Home', 'Analytics', 'Devices', 'Reports', 'Status'].map((item, index) => (
+          <div key={index} className='bg-white w-[34vh] flex justify-center py-2 shadow-sm hover:shadow-md transition-all cursor-pointer'>
+            {item}
+          </div>
+        ))}
+        <div className='bg-blue-600 rounded-lg text-white w-[22vh] flex justify-center items-center py-2 
+        shadow-sm hover:shadow-md transition-all cursor-pointer' onClick={()=> navigate("/audit?serial_number=" +serialNumber)}>
+          Audit Trail
+        </div>
+      </div>
+
+      {/* Machine Overview */}
+      <div className='flex flex-row px-2 max-w-8xl mt-3  min-w-3xl gap-3'>
+        <div className='w-68 h-46 bg-white rounded-lg shadow-md '>
+          <img src={model} alt="" className='h-full object-cover' />
+        </div>
+        <div className='flex flex-col gap-2'>
+          {/* Top Row */}
+          <div className='flex flex-row justify-around gap-3 '>
+            {[
+              { label: 'Status', value: 'RUN', color: 'bg-green-400', textColor: 'black' },
+              { label: 'Total Production', value:  machineData?.d?.Total_Production, color: 'text-blue-800', textColor: 'blue-800'},
+              { label: 'Good Production', value:  machineData?.d?.Good_Count, color: 'text-teal-600', textColor: 'teal-600' },
+              { label: 'Bad Production', value:  machineData?.d?.Reject_Counters, color: 'text-red-600', textColor: 'red-600' },
+            ].map((item, index) => (
+              <div key={index} className='bg-white w-60 h-22 flex flex-col justify-center items-center shadow-sm hover:shadow-md transition-all'>
+                <h1>
+                  {item.label === 'Status' ? (
+                    <button className={`${item.color} text-${item.textColor} px-4 py-1 text-2xl rounded-sm`}>{item.value}</button>
+                  ) : (
+                    <span className={`text-3xl font-semibold ${item.color}`}>{item.value}</span>
+                  )}
+                </h1>
+                <p className='text-[2vh] text-gray-600 mt-1 '>{item.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Row */}
+          <div className='flex flex-row justify-evenly gap-3 '>
+            {[
+              { label: 'Batch Number', value: machineData?.d?.Batch_Number },
+              { label: 'OEE',  value: machineData?.d?.current_OEE ? Number(machineData.d.current_OEE).toFixed(2) : '0.00' },
+              { label: 'Current Speed',value: machineData?.d?.current_speed },
+              { label: 'Recipe Number', value: machineData?.d?.Reciepe_Name },
+            ].map((item, index) => (
+              <div key={index} className='bg-white w-60 h-22 flex flex-col justify-center items-center shadow-sm hover:shadow-md transition-all'>
+                <h1 className='text-3xl font-semibold text-gray-800'>{item.value}</h1>
+                <p className='text-sm text-gray-600 mt-1'>{item.label}</p>
               </div>
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Production Details Section */}
-        <div className={`rounded-lg shadow-md p-4 mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-          <h6 className={`text-lg md:text-xl font-bold mb-3 ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-            Production Details
-          </h6>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {['Total_Production', 'Good_Count', 'Reject_Counters'].map((key, index) => (
-              <div key={index} className={`p-2 rounded-lg shadow-sm flex flex-col sm:flex-row items-center justify-between ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                <p className={`text-sm sm:text-base font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-800'} mb-1 sm:mb-0`}>
-                  {key.replace(/_/g, ' ')}
-                </p>
-                <p className={`text-base sm:text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-                  {machineData?.d?.[key]}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* OEE Details Section */}
-        <div className={`rounded-lg shadow-md p-4 mb-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-          <h6 className={`text-lg md:text-xl font-bold mb-3 ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-            OEE Details
-          </h6>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {['Performance', 'Availability', 'Quality'].map((key, index) => (
-              <div key={index} className={`p-2 rounded-lg shadow-sm flex flex-col sm:flex-row items-center justify-between ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                <p className={`text-sm sm:text-base font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-800'} mb-1 sm:mb-0`}>
-                  {key}
-                </p>
-                <p className={`text-base sm:text-xl font-semibold ${isDarkMode ? 'text-blue-500' : 'text-blue-600'}`}>
-                  {eval(key.toLowerCase())}%
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          {/* Production Chart */}
-          <div className={`rounded-lg shadow-md p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-            <h3 className={`text-lg font-semibold md:text-xl mb-3 md:mb-4 text-center ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-              Production Overview
-            </h3>
-            <div className="relative aspect-square max-h-96 mx-auto">
-              <div className="absolute inset-0">
-                <Doughnut
-                  data={productionData}
-                  options={{
-                    ...options,
-                    responsive: true,
-                    maintainAspectRatio: false
-                  }}
-                />
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className={`text-2xl md:text-3xl font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                  {machineData?.d?.Total_Production || 0}
-                </span>
-                <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  Total Units
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* OEE Chart */}
-          <div className={`rounded-lg shadow-md p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-            <h3 className={`text-lg font-semibold md:text-xl mb-3 md:mb-4 text-center ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+      {/* Charts Section */}
+      <div className='flex flex-row min-w-xl max-w-8xl h-[400px]  mt-6  justify-evenly'>
+        {/* OEE Graph */}
+        <div className='bg-white w-[49%] h-full flex shadow-md '>
+          <div className={`rounded-lg p-6  ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <h3 className={`text-lg font-semibold md:text-xl mb-4 text-center ${isDarkMode ? 'text-blue-400' : 'text-blue-800'}`}>
               Overall Equipment Effectiveness
             </h3>
-            <div className="relative aspect-square max-h-96 mx-auto">
-              <div className="absolute inset-0">
-                <Doughnut
-                  data={oeeData}
-                  options={{
-                    ...oeeOptions,
-                    responsive: true,
-                    maintainAspectRatio: false
-                  }}
-                />
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className={`text-2xl md:text-3xl font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                  {oeeValue}%
-                </span>
-                <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                  Current OEE
-                </span>
-              </div>
+            <div className="relative h-80 w-100">
+              <Bar
+                data={{
+                  labels: ['Availability', 'Performance', 'Quality'],
+                  datasets: [
+                    {
+                      label: 'OEE Components',
+                      data: [availability, performance, quality],
+                      backgroundColor: [
+                        'rgba(37, 99, 235, 0.6)', // Navy Blue
+                        'rgba(20, 184, 166, 0.6)', // Teal
+                        'rgba(107, 114, 128, 0.6)', // Gray
+                      ],
+                      borderColor: [
+                        'rgba(37, 99, 235, 1)', // Navy Blue
+                        'rgba(20, 184, 166, 1)', // Teal
+                        'rgba(107, 114, 128, 1)', // Gray
+                      ],
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      max: 100,
+                      ticks: {
+                        color: isDarkMode ? 'rgba(209, 213, 219, 1)' : 'rgba(75, 85, 99, 1)',
+                      },
+                      grid: {
+                        color: isDarkMode ? 'rgba(55, 65, 81, 0.2)' : 'rgba(229, 231, 235, 0.2)',
+                      },
+                    },
+                    x: {
+                      ticks: {
+                        color: isDarkMode ? 'rgba(209, 213, 219, 1)' : 'rgba(75, 85, 99, 1)',
+                      },
+                      grid: {
+                        color: isDarkMode ? 'rgba(55, 65, 81, 0.2)' : 'rgba(229, 231, 235, 0.2)',
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                  barThickness: 70, // Decreased bar width
+                }}
+              />
             </div>
           </div>
         </div>
 
+        {/* Production Graph */}
+        <div className='bg-white w-[49%] h-full flex shadow-md '>
+          <div className={`rounded-lg p-6  ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <h3 className={`text-lg font-semibold md:text-xl mb-4 text-center ${isDarkMode ? 'text-blue-400' : 'text-blue-800'}`}>
+              Production Overview
+            </h3>
+            <div className="relative h-80 w-100">
+              <Bar 
+                data={{
+                  labels: ['Total Production', 'Good Production', 'Bad Production'],
+                  datasets: [
+                    {
+                      label: 'Production',
+                      data: [totalProduction, goodProduction, badProduction],
+                      backgroundColor: [
+                        'rgba(37, 99, 235, 0.6)', // Navy Blue
+                        'rgba(20, 184, 166, 0.6)', // Teal
+                        'rgba(107, 114, 128, 1)', // Gray
+                      ],
+                      borderColor: [
+                        'rgba(37, 99, 235, 1)', // Navy Blue
+                        'rgba(20, 184, 166, 1)', // Teal
+                        'rgba(107, 114, 128, 1)', // Gray
+                      ],
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: {
+                        color: isDarkMode ? 'rgba(209, 213, 219, 1)' : 'rgba(75, 85, 99, 1)',
+                      },
+                      grid: {
+                        color: isDarkMode ? 'rgba(55, 65, 81, 0.2)' : 'rgba(229, 231, 235, 0.2)',
+                      },
+                    },
+                    x: {
+                      ticks: {
+                        color: isDarkMode ? 'rgba(209, 213, 219, 1)' : 'rgba(75, 85, 99, 1)',
+                      },
+                      grid: {
+                        color: isDarkMode ? 'rgba(55, 65, 81, 0.2)' : 'rgba(229, 231, 235, 0.2)',
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                  barThickness: 70, // Decreased bar width
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
     </>
   );
 }
