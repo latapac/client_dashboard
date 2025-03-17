@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getMachineData, getMachines, getMachineUser } from '../../../backservice/backservice';
+import { mstatus } from '../../../constants';
 
 function MachineList() {
   const navigate = useNavigate();
@@ -11,8 +12,6 @@ function MachineList() {
   const [machineUsers, setMachineUsers] = useState({})
 
   const isDarkMode = false;
-
-  const mstatus = ['STOP', 'RUNNING', 'IDLE', 'ABORTED'];
 
   function formatTimestamp(isoString) {
     const date = new Date(isoString);
@@ -48,12 +47,14 @@ function MachineList() {
     switch (status) {
       case 'STOP':
         return 'bg-red-500';
-      case 'RUNNING':
-        return 'bg-green-500';
-      case 'IDLE':
+      case 'RESETTING':
         return 'bg-yellow-500';
+      case 'IDLE':
+        return 'bg-green-500';
       case 'ABORTED':
         return 'bg-orange-300';
+      case 'EXECUTE':
+        return 'bg-green-700'
       default:
         return 'bg-gray-500';
     }
