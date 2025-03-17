@@ -91,9 +91,15 @@ function AuditTrail() {
                `${date.getSeconds().toString().padStart(2, '0')}`;
     }
 
-    function userLogText(){
-        if (user) {
-            
+    function LogText(key,data){
+        if (key=="User") {
+            if (data=="") {
+                return "SYSTEM LOG OUT"
+            }else{
+                return "USER ("+data+") Logged In"
+            }
+        }else{
+            return data
         }
     }
 
@@ -178,7 +184,7 @@ function AuditTrail() {
                                     <tr key={data._id} className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                                         <td className="px-4 py-2 text-sm">{formatTimestamp(data?.ts)}</td>
                                         <td className="px-4 py-2 text-sm">{firstKey || '--'}</td>
-                                        <td className="px-4 py-2 text-sm">{firstKey ? data.d[firstKey]?.[0] : '--'}</td>
+                                        <td className="px-4 py-2 text-sm">{LogText(firstKey,data.d[firstKey]?.[0])}</td>
                                         <td className="px-4 py-2 text-sm">{data?.d?.User?.[0] || "SYSTEM"}</td>
                                     </tr>
                                 );
