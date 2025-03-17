@@ -22,8 +22,6 @@ function AuditTrail() {
             setAuditData(data);
             setFilteredData(data);
         });
-<<<<<<< HEAD
-=======
         fetchData();
 
         const intervalId = setInterval(() => {
@@ -32,9 +30,7 @@ function AuditTrail() {
     
         return () => clearInterval(intervalId);
     }
->>>>>>> b66b87b89a316044020790575695f812dce9c729
-    }, [serialNumber]);
-
+    , [serialNumber]);
     // Filtering Logic
     useEffect(() => {
         let filtered = auditData;
