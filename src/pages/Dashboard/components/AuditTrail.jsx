@@ -32,7 +32,7 @@ function AuditTrail() {
         return () => clearInterval(intervalId);
     }
     , [serialNumber]);
-    // Filtering Logic
+   
     useEffect(() => {
         let filtered = auditData;
 
@@ -55,7 +55,6 @@ function AuditTrail() {
             filtered = filtered.filter(item => new Date(item.ts) >= last30Days);
         }
 
-        // Date-Time Range Filtering
         if (startDate && endDate) {
             const start = new Date(startDate);
             const end = new Date(endDate);
@@ -65,7 +64,6 @@ function AuditTrail() {
             });
         }
 
-        // Search Filtering
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
             filtered = filtered.filter(item => {
@@ -79,7 +77,7 @@ function AuditTrail() {
         }
 
         setFilteredData(filtered);
-        setCurrentPage(0);
+        // setCurrentPage(0);
     }, [auditData, searchQuery, selectedDateRange, startDate, endDate]);
 
     function formatTimestamp(isoString) {
@@ -108,7 +106,7 @@ function AuditTrail() {
 
     return (
         <div className="min-h-screen flex flex-col p-0.5 bg-gray-100 dark:bg-gray-900">
-            {/* Filters Section */}
+          
             <div className="flex flex-wrap gap-2 mb-4 p-1 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md">
                 <input
                     type="text"
@@ -118,7 +116,6 @@ function AuditTrail() {
                     className="p-0.5 border rounded-md focus:ring focus:ring-blue-300 w-72 dark:bg-gray-700 dark:text-white"
                 />
 
-                {/* Date & Time Filters */}
                 <input
                     type="datetime-local"
                     value={startDate}
@@ -132,7 +129,6 @@ function AuditTrail() {
                     className="p-0.5 border rounded-md focus:ring focus:ring-blue-300 w-64 dark:bg-gray-700 dark:text-white"
                 />
 
-                {/* Date Range Buttons */}
                 <div className="flex gap-2 flex-wrap">
                     {["yesterday", "last7days", "last30days", "all"].map((range) => {
                         const labels = {
@@ -163,7 +159,6 @@ function AuditTrail() {
                 </div>
             </div>
 
-            {/* Table Section */}
             <div className="flex-1 overflow-auto bg-white dark:bg-gray-800 rounded-lg shadow-md">
                 <table className="min-w-full border-collapse">
                     <thead className="bg-blue-500 text-white">
@@ -198,7 +193,6 @@ function AuditTrail() {
                 </table>
             </div>
 
-            {/* Pagination Controls */}
             <div className="flex justify-center items-center mt-6 gap-4">
                 <button onClick={() => setCurrentPage(Math.max(currentPage - 1, 0))} disabled={currentPage === 0} className="bg-blue-600 text-white px-4 py-2 rounded-md">Previous</button>
                 <span>Page {currentPage + 1} of {totalPages}</span>
