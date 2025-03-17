@@ -18,21 +18,22 @@ function AuditTrail() {
     const itemsPerPage = 16;
 
     useEffect(() => {
-        const fetchData= ()=>{
-        getAuditTrailData(serialNumber).then((data) => {
-            setAuditData(data);
-            setFilteredData(data);
-        });}
+        const fetchData = () => {
+            getAuditTrailData(serialNumber).then((data) => {
+                setAuditData(data);
+                setFilteredData(data);
+            });
+        }
         fetchData();
 
         const intervalId = setInterval(() => {
-          fetchData();
+            fetchData();
         }, 4000);
-    
+
         return () => clearInterval(intervalId);
     }
-    , [serialNumber]);
-   
+        , [serialNumber]);
+
     useEffect(() => {
         let filtered = auditData;
 
@@ -42,7 +43,7 @@ function AuditTrail() {
         if (selectedDateRange === 'yesterday') {
             const yesterday = new Date(today);
             yesterday.setDate(today.getDate() - 1);
-            filtered = filtered.filter(item => 
+            filtered = filtered.filter(item =>
                 new Date(item.ts).toDateString() === yesterday.toDateString()
             );
         } else if (selectedDateRange === 'last7days') {
@@ -83,22 +84,33 @@ function AuditTrail() {
     function formatTimestamp(isoString) {
         const date = new Date(isoString);
         return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/` +
-               `${date.getDate().toString().padStart(2, '0')} ` +
-               `${date.getHours().toString().padStart(2, '0')}:` +
-               `${date.getMinutes().toString().padStart(2, '0')}:` +
-               `${date.getSeconds().toString().padStart(2, '0')}`;
+            `${date.getDate().toString().padStart(2, '0')} ` +
+            `${date.getHours().toString().padStart(2, '0')}:` +
+            `${date.getMinutes().toString().padStart(2, '0')}:` +
+            `${date.getSeconds().toString().padStart(2, '0')}`;
     }
 
-    function LogText(key,data){
-        if (key=="User") {
-            if (data=="") {
+    function LogText(key, data) {
+        if (key == "User") {
+            if (data == "") {
                 return "SYSTEM LOG OUT"
-            }else{
-                return "USER ("+data+") Logged In"
+            } else {
+                return "USER (" + data + ") Logged In"
             }
-        }else{
+        } else {
             return data
         }
+    }
+    function alarmdata(data) {
+        
+        return (
+            <>
+                <td className="px-4 py-2 text-sm">{formatTimestamp(data?.d.trigger_time)}</td>
+                <td className="px-4 py-2 text-sm">{"Alarm ("+data?.d.status+")"}</td>
+                <td className="px-4 py-2 text-sm">{data?.d.message}</td>
+                <td className="px-4 py-2 text-sm">{data?.user?.user || "SYSTEM"}</td>
+            </>
+        )
     }
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -106,7 +118,7 @@ function AuditTrail() {
 
     return (
         <div className="min-h-screen flex flex-col p-0.5 bg-gray-100 dark:bg-gray-900">
-          
+
             <div className="flex flex-wrap gap-2 mb-4 p-1 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md">
                 <input
                     type="text"
@@ -148,9 +160,8 @@ function AuditTrail() {
                             <button
                                 key={range}
                                 onClick={() => setSelectedDateRange(range === 'all' ? '' : range)}
-                                className={`px-3 py-1 text-sm rounded-md text-white ${colors[range]} ${
-                                    selectedDateRange === range ? "ring-2 ring-offset-2 ring-blue-400" : ""
-                                }`}
+                                className={`px-3 py-1 text-sm rounded-md text-white ${colors[range]} ${selectedDateRange === range ? "ring-2 ring-offset-2 ring-blue-400" : ""
+                                    }`}
                             >
                                 {labels[range]}
                             </button>
@@ -177,10 +188,15 @@ function AuditTrail() {
                                 const firstKey = Object.keys(data?.d || {})[0];
                                 return (
                                     <tr key={data._id} className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                        <td className="px-4 py-2 text-sm">{formatTimestamp(data?.ts)}</td>
-                                        <td className="px-4 py-2 text-sm">{firstKey || '--'}</td>
-                                        <td className="px-4 py-2 text-sm">{LogText(firstKey,data.d[firstKey]?.[0])}</td>
-                                        <td className="px-4 py-2 text-sm">{data?.d?.User?.[0] || "SYSTEM"}</td>
+                                        {data?.topic == "parameter_change" ? (<>
+                                            <td className="px-4 py-2 text-sm">{formatTimestamp(data?.ts)}</td>
+                                            <td className="px-4 py-2 text-sm">{firstKey || '--'}</td>
+                                            <td className="px-4 py-2 text-sm">{LogText(firstKey, data.d[firstKey]?.[0])}</td>
+                                            <td className="px-4 py-2 text-sm">{data?.d?.User?.[0] || "SYSTEM"}</td>
+                                        </>) : (<>
+                                            {alarmdata(data)}
+                                        </>)}
+
                                     </tr>
                                 );
                             })

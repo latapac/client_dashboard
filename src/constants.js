@@ -1,0 +1,1 @@
+export const mstatus = ['STOP', 'RUNNING', 'IDLE', 'ABORTED','EXECUTE'];
