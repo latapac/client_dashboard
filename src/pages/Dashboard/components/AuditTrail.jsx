@@ -12,52 +12,22 @@ function AuditTrail() {
     const [currentPage, setCurrentPage] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedDateRange, setSelectedDateRange] = useState('all');
-
-    // New state for date-time filtering
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
     const itemsPerPage = 16;
 
     useEffect(() => {
-        const fetchData = ()=>{
         getAuditTrailData(serialNumber).then((data) => {
             setAuditData(data);
             setFilteredData(data);
-        });}
-        fetchData();
-
-        const intervalId = setInterval(() => {
-          fetchData();
-        }, 4000);
-    
-        return () => clearInterval(intervalId);
-    
+        });
     }, [serialNumber]);
 
-    // Filter function for date-time range
-    const filterByDateTimeRange = () => {
-        let filtered = auditData;
-
-        if (startDate && endDate) {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-
-            filtered = filtered.filter(item => {
-                const itemDate = new Date(item.ts);
-                return itemDate >= start && itemDate <= end;
-            });
-        }
-
-        setFilteredData(filtered);
-        setCurrentPage(0);
-    };
-
-    // Combined filter effect
+    // Filtering Logic
     useEffect(() => {
         let filtered = auditData;
 
-        // Date range filtering
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -77,7 +47,17 @@ function AuditTrail() {
             filtered = filtered.filter(item => new Date(item.ts) >= last30Days);
         }
 
-        // Search filtering
+        // Date-Time Range Filtering
+        if (startDate && endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            filtered = filtered.filter(item => {
+                const itemDate = new Date(item.ts);
+                return itemDate >= start && itemDate <= end;
+            });
+        }
+
+        // Search Filtering
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
             filtered = filtered.filter(item => {
@@ -92,7 +72,7 @@ function AuditTrail() {
 
         setFilteredData(filtered);
         setCurrentPage(0);
-    }, [auditData, searchQuery, selectedDateRange]);
+    }, [auditData, searchQuery, selectedDateRange, startDate, endDate]);
 
     function formatTimestamp(isoString) {
         const date = new Date(isoString);
@@ -110,37 +90,28 @@ function AuditTrail() {
     return (
         <div className="min-h-screen flex flex-col p-0.5 bg-gray-100 dark:bg-gray-900">
             {/* Filters Section */}
-            <div className="flex flex-wrap gap-2 mb-4 p-2 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md">
+            <div className="flex flex-wrap gap-2 mb-4 p-1 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md">
                 <input
                     type="text"
                     placeholder="Search by Identification, Text, or User"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="p-1 border rounded-md focus:ring focus:ring-blue-300 w-72 dark:bg-gray-700 dark:text-white"
+                    className="p-0.5 border rounded-md focus:ring focus:ring-blue-300 w-72 dark:bg-gray-700 dark:text-white"
                 />
 
-                {/* Date-Time Range Filter */}
-                <div className="flex gap-2 items-center">
-                    <input
-                        type="datetime-local"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        className="p-1 border rounded-md dark:bg-gray-700 dark:text-white"
-                    />
-                    <span className="text-gray-600 dark:text-gray-400">to</span>
-                    <input
-                        type="datetime-local"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        className="p-1 border rounded-md dark:bg-gray-700 dark:text-white"
-                    />
-                    <button 
-                        onClick={filterByDateTimeRange}
-                        className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                    >
-                        Apply
-                    </button>
-                </div>
+                {/* Date & Time Filters */}
+                <input
+                    type="datetime-local"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="p-0.5 border rounded-md focus:ring focus:ring-blue-300 w-64 dark:bg-gray-700 dark:text-white"
+                />
+                <input
+                    type="datetime-local"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="p-0.5 border rounded-md focus:ring focus:ring-blue-300 w-64 dark:bg-gray-700 dark:text-white"
+                />
 
                 {/* Date Range Buttons */}
                 <div className="flex gap-2 flex-wrap">
@@ -185,8 +156,34 @@ function AuditTrail() {
                             ))}
                         </tr>
                     </thead>
-                    <tbody>{/* Table Data */}</tbody>
+
+                    <tbody className="divide-y divide-gray-300 dark:divide-gray-700">
+                        {paginatedData.length > 0 ? (
+                            paginatedData.map((data) => {
+                                const firstKey = Object.keys(data?.d || {})[0];
+                                return (
+                                    <tr key={data._id} className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        <td className="px-4 py-2 text-sm">{formatTimestamp(data?.ts)}</td>
+                                        <td className="px-4 py-2 text-sm">{firstKey || '--'}</td>
+                                        <td className="px-4 py-2 text-sm">{firstKey ? data.d[firstKey]?.[0] : '--'}</td>
+                                        <td className="px-4 py-2 text-sm">{data?.d?.User?.[0] || "SYSTEM"}</td>
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan="4" className="px-6 py-2 text-center text-gray-500">No matching data found.</td>
+                            </tr>
+                        )}
+                    </tbody>
                 </table>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center items-center mt-6 gap-4">
+                <button onClick={() => setCurrentPage(Math.max(currentPage - 1, 0))} disabled={currentPage === 0} className="bg-blue-600 text-white px-4 py-2 rounded-md">Previous</button>
+                <span>Page {currentPage + 1} of {totalPages}</span>
+                <button onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages - 1))} disabled={currentPage >= totalPages - 1} className="bg-blue-600 text-white px-4 py-2 rounded-md">Next</button>
             </div>
         </div>
     );
