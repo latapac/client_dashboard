@@ -22,6 +22,17 @@ function AuditTrail() {
             setAuditData(data);
             setFilteredData(data);
         });
+<<<<<<< HEAD
+=======
+        fetchData();
+
+        const intervalId = setInterval(() => {
+          fetchData();
+        }, 4000);
+    
+        return () => clearInterval(intervalId);
+    }
+>>>>>>> b66b87b89a316044020790575695f812dce9c729
     }, [serialNumber]);
 
     // Filtering Logic
