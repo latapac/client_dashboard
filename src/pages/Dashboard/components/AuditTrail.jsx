@@ -18,10 +18,11 @@ function AuditTrail() {
     const itemsPerPage = 16;
 
     useEffect(() => {
+        const fetchData= ()=>{
         getAuditTrailData(serialNumber).then((data) => {
             setAuditData(data);
             setFilteredData(data);
-        });
+        });}
         fetchData();
 
         const intervalId = setInterval(() => {
@@ -90,7 +91,12 @@ function AuditTrail() {
                `${date.getSeconds().toString().padStart(2, '0')}`;
     }
 
-    // **Pagination**
+    function userLogText(){
+        if (user) {
+            
+        }
+    }
+
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const paginatedData = filteredData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
