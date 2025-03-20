@@ -90,39 +90,10 @@ function AuditTrail() {
             `${date.getSeconds().toString().padStart(2, '0')}`;
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    function LogText(key, data) {
-        if (key == "User") {
-            if (data == "") {
-                return "SYSTEM LOG OUT"
-            } else {
-                return "USER (" + data + ") Logged In"
-            }
-        } else {
-            return data
-=======
     function userLogText(){
         if (user) {
             
->>>>>>> parent of ec26949 (audit)
-=======
-    function userLogText(){
-        if (user) {
-            
->>>>>>> parent of ec26949 (audit)
         }
-    }
-    function alarmdata(data) {
-        
-        return (
-            <>
-                <td className="px-4 py-2 text-sm">{formatTimestamp(data?.d.trigger_time)}</td>
-                <td className="px-4 py-2 text-sm">{"Alarm ("+data?.d.status+")"}</td>
-                <td className="px-4 py-2 text-sm">{data?.d.message}</td>
-                <td className="px-4 py-2 text-sm">{data?.user?.user || "SYSTEM"}</td>
-            </>
-        )
     }
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
