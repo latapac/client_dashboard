@@ -171,7 +171,6 @@ function AuditTrail() {
                                 const firstKey = Object.keys(data?.d || {})[0];
                                 return (
                                     <tr key={data._id} className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-<<<<<<< HEAD
                                         {data?.topic == "parameter_change" ? (<>
                                             <td className="px-4 py-2 text-sm">{formatTimestamp(data?.ts)}</td>
                                             <td className="px-4 py-2 text-sm">{firstKey || '--'}</td>
@@ -181,12 +180,6 @@ function AuditTrail() {
                                             {alarmdata(data)}
                                         </>)}
 
-=======
-                                        <td className="px-4 py-2 text-sm">{formatTimestamp(data?.ts)}</td>
-                                        <td className="px-4 py-2 text-sm">{firstKey || '--'}</td>
-                                        <td className="px-4 py-2 text-sm">{firstKey ? data.d[firstKey]?.[0] : '--'}</td>
-                                        <td className="px-4 py-2 text-sm">{data?.d?.User?.[0] || "SYSTEM"}</td>
->>>>>>> parent of ec26949 (audit)
                                     </tr>
                                 );
                             })
