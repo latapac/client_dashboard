@@ -12,74 +12,15 @@ function AuditTrail() {
     const [currentPage, setCurrentPage] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedDateRange, setSelectedDateRange] = useState('all');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
 
     const itemsPerPage = 16;
 
     useEffect(() => {
-        const fetchData = () => {
-            getAuditTrailData(serialNumber).then((data) => {
-                setAuditData(data);
-                setFilteredData(data);
-            });
-        }
-        fetchData();
-
-        const intervalId = setInterval(() => {
-            fetchData();
-        }, 4000);
-
-        return () => clearInterval(intervalId);
-    }
-        , [serialNumber]);
-
-    useEffect(() => {
-        let filtered = auditData;
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        if (selectedDateRange === 'yesterday') {
-            const yesterday = new Date(today);
-            yesterday.setDate(today.getDate() - 1);
-            filtered = filtered.filter(item =>
-                new Date(item.ts).toDateString() === yesterday.toDateString()
-            );
-        } else if (selectedDateRange === 'last7days') {
-            const last7Days = new Date(today);
-            last7Days.setDate(today.getDate() - 7);
-            filtered = filtered.filter(item => new Date(item.ts) >= last7Days);
-        } else if (selectedDateRange === 'last30days') {
-            const last30Days = new Date(today);
-            last30Days.setDate(today.getDate() - 30);
-            filtered = filtered.filter(item => new Date(item.ts) >= last30Days);
-        }
-
-        if (startDate && endDate) {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            filtered = filtered.filter(item => {
-                const itemDate = new Date(item.ts);
-                return itemDate >= start && itemDate <= end;
-            });
-        }
-
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(item => {
-                const firstKey = Object.keys(item.d || {})[0] || '';
-                return (
-                    firstKey.toLowerCase().includes(query) ||
-                    (item.d[firstKey]?.[0]?.toString().toLowerCase().includes(query) ?? false) ||
-                    (item.d.User?.[0]?.toLowerCase()?.includes(query) ?? false)
-                );
-            });
-        }
-
-        setFilteredData(filtered);
-        // setCurrentPage(0);
-    }, [auditData, searchQuery, selectedDateRange, startDate, endDate]);
+        getAuditTrailData(serialNumber).then((data) => {
+            setAuditData(data);
+            setFilteredData(data);
+        });
+    }, [serialNumber]);
 
     function formatTimestamp(isoString) {
         const date = new Date(isoString);
@@ -90,18 +31,39 @@ function AuditTrail() {
             `${date.getSeconds().toString().padStart(2, '0')}`;
     }
 
-    function userLogText(){
-        if (user) {
-            
-        }
-    }
+    // **Date Filtering Function**
+    const filterByDateRange = (range) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
+        let filtered = auditData;
+
+        if (range === 'yesterday') {
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            filtered = auditData.filter(item => new Date(item.ts).toDateString() === yesterday.toDateString());
+        } else if (range === 'last7days') {
+            const last7Days = new Date(today);
+            last7Days.setDate(today.getDate() - 7);
+            filtered = auditData.filter(item => new Date(item.ts) >= last7Days);
+        } else if (range === 'last30days') {
+            const last30Days = new Date(today);
+            last30Days.setDate(today.getDate() - 30);
+            filtered = auditData.filter(item => new Date(item.ts) >= last30Days);
+        }
+
+        setSelectedDateRange(range);
+        setFilteredData(filtered);
+        setCurrentPage(0);
+    };
+
+    // **Pagination**
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const paginatedData = filteredData.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
     return (
         <div className="min-h-screen flex flex-col p-0.5 bg-gray-100 dark:bg-gray-900">
-
+            {/* Filters Section */}
             <div className="flex flex-wrap gap-2 mb-4 p-1 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md">
                 <input
                     type="text"
@@ -109,19 +71,6 @@ function AuditTrail() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="p-0.5 border rounded-md focus:ring focus:ring-blue-300 w-72 dark:bg-gray-700 dark:text-white"
-                />
-
-                <input
-                    type="datetime-local"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="p-0.5 border rounded-md focus:ring focus:ring-blue-300 w-64 dark:bg-gray-700 dark:text-white"
-                />
-                <input
-                    type="datetime-local"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="p-0.5 border rounded-md focus:ring focus:ring-blue-300 w-64 dark:bg-gray-700 dark:text-white"
                 />
 
                 <div className="flex gap-2 flex-wrap">
@@ -142,9 +91,10 @@ function AuditTrail() {
                         return (
                             <button
                                 key={range}
-                                onClick={() => setSelectedDateRange(range === 'all' ? '' : range)}
-                                className={`px-3 py-1 text-sm rounded-md text-white ${colors[range]} ${selectedDateRange === range ? "ring-2 ring-offset-2 ring-blue-400" : ""
-                                    }`}
+                                onClick={() => filterByDateRange(range)}
+                                className={`px-3 py-1 text-sm rounded-md text-white ${colors[range]} ${
+                                    selectedDateRange === range ? "ring-2 ring-offset-2 ring-blue-400" : ""
+                                }`}
                             >
                                 {labels[range]}
                             </button>
@@ -168,34 +118,52 @@ function AuditTrail() {
                     <tbody className="divide-y divide-gray-300 dark:divide-gray-700">
                         {paginatedData.length > 0 ? (
                             paginatedData.map((data) => {
-                                const firstKey = Object.keys(data?.d || {})[0];
+                                const firstKey = Object.keys(data?.d)?.[0];
                                 return (
                                     <tr key={data._id} className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                        {data?.topic == "parameter_change" ? (<>
-                                            <td className="px-4 py-2 text-sm">{formatTimestamp(data?.ts)}</td>
-                                            <td className="px-4 py-2 text-sm">{firstKey || '--'}</td>
-                                            <td className="px-4 py-2 text-sm">{LogText(firstKey, data.d[firstKey]?.[0])}</td>
-                                            <td className="px-4 py-2 text-sm">{data?.d?.User?.[0] || "SYSTEM"}</td>
-                                        </>) : (<>
-                                            {alarmdata(data)}
-                                        </>)}
-
+                                        <td className="px-4 py-2 text-sm">{formatTimestamp(data?.ts)}</td>
+                                        <td className="px-4 py-2 text-sm">{firstKey || '--'}</td>
+                                        <td className="px-4 py-2 text-sm">{firstKey ? data.d[firstKey]?.[0] : '--'}</td>
+                                        <td className="px-4 py-2 text-sm">{data?.d?.User?.[0] || 'NULL'}</td>
                                     </tr>
                                 );
                             })
                         ) : (
                             <tr>
-                                <td colSpan="4" className="px-6 py-2 text-center text-gray-500">No matching data found.</td>
+                                <td colSpan="4" className="px-6 py-2 text-center text-gray-500">
+                                    No matching data found.
+                                </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
 
+            {/* Pagination Controls */}
             <div className="flex justify-center items-center mt-6 gap-4">
-                <button onClick={() => setCurrentPage(Math.max(currentPage - 1, 0))} disabled={currentPage === 0} className="bg-blue-600 text-white px-4 py-2 rounded-md">Previous</button>
-                <span>Page {currentPage + 1} of {totalPages}</span>
-                <button onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages - 1))} disabled={currentPage >= totalPages - 1} className="bg-blue-600 text-white px-4 py-2 rounded-md">Next</button>
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+                    disabled={currentPage === 0}
+                    className={`px-4 py-2 text-sm rounded-md transition ${
+                        currentPage === 0 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+                    }`}
+                >
+                    Previous
+                </button>
+
+                <span className="px-4 py-2 text-sm font-semibold bg-gray-200 dark:bg-gray-700 rounded-md text-gray-900 dark:text-white">
+                    Page {currentPage + 1} of {totalPages}
+                </span>
+
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
+                    disabled={currentPage >= totalPages - 1}
+                    className={`px-4 py-2 text-sm rounded-md transition ${
+                        currentPage >= totalPages - 1 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+                    }`}
+                >
+                    Next
+                </button>
             </div>
         </div>
     );
