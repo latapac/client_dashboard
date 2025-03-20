@@ -91,6 +91,7 @@ function AuditTrail() {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     function LogText(key, data) {
         if (key == "User") {
             if (data == "") {
@@ -100,6 +101,11 @@ function AuditTrail() {
             }
         } else {
             return data
+=======
+    function userLogText(){
+        if (user) {
+            
+>>>>>>> parent of ec26949 (audit)
 =======
     function userLogText(){
         if (user) {
